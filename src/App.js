@@ -13,7 +13,7 @@ function App() {
   return (
     <div>
       <Navbar />
-      <div className="m-3 bg-panda rounded-lg w-1/6 mx-auto py-1">
+      <div className="m-3 bg-panda rounded-lg  mx-auto py-1">
         <Routes>
           <Route path={"/flowers"} element={<FlowersList />} />
           <Route path={"/"} element={<FlowersList />} />
