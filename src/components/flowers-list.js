@@ -97,6 +97,28 @@ const FlowersList = (props) => {
           </div>
         </div>
       </form>
+
+      <div className="flex flex-wrap">
+        {flowers.map((flower) => {
+          return (
+            <div className="w-1/3 h-[550px] px-2 text-center justify-center mb-0 font-bold">
+              <img
+                className="w-full h-[350px] object-cover mb-2"
+                src={flower.poster + "/100px180"}
+                alt=""
+              />
+              <div className="flex justify-between text-xs w-[90%] mx-auto">
+                <p> {flower.rated}</p>
+                <Link to={"/flowers/" + flower._id}>View Reviews</Link>
+              </div>
+              <p className="text-base">{flower.title}</p>
+              <p className="font-normal text-sm text-justify w-[90%] mx-auto">
+                {flower.plot}
+              </p>
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 };
