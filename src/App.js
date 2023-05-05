@@ -11,7 +11,7 @@ function App() {
   let user;
   let login;
   return (
-    <div>
+    <div className="bg-gray-500 h-screen">
       <Navbar />
       <div className="m-3 bg-panda rounded-lg  mx-auto py-1">
         <Routes>

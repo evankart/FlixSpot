@@ -45,7 +45,28 @@ const FlowersList = (props) => {
     setSearchRating(searchRating);
   };
 
-  const findByTitle = (title) => {};
+  const find = (query, by) => {
+    FlowerDataService.find(query, by)
+      .then((response) => {
+        console.log(response.data);
+        setFlowers(response.data.flowers);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
+
+  const findByTitle = () => {
+    find(searchTitle, "title");
+  };
+
+  const findByRating = () => {
+    if (searchRating === "All Ratings") {
+      retrieveFlowers();
+    } else {
+      find(searchRating, "rated");
+    }
+  };
 
   return (
     <div>
@@ -65,7 +86,7 @@ const FlowersList = (props) => {
             <button
               className="px-4 py-1 bg-gray-200 rounded-lg"
               type="button"
-              // onClick={findByTitle}
+              onClick={findByTitle}
             >
               Search by Name
             </button>
@@ -90,7 +111,7 @@ const FlowersList = (props) => {
             <button
               className="px-4 py-1 bg-gray-200 rounded-lg"
               type="button"
-              // onClick={findByTitle}
+              onClick={findByRating}
             >
               Search by Rating
             </button>
@@ -98,12 +119,12 @@ const FlowersList = (props) => {
         </div>
       </form>
 
-      <div className="flex flex-wrap">
+      <div className="flex flex-wrap max-w-7xl mx-auto">
         {flowers.map((flower) => {
           return (
-            <div className="w-1/3 h-[550px] px-2 text-center justify-center mb-0 font-bold">
+            <div className="mx-auto max-w-[400px] sm:w-1/3 px-2 text-center justify-center mb-0 font-bold">
               <img
-                className="w-full h-[350px] object-cover mb-2"
+                className="w-full  aspect-[2/3] object-cover mb-2"
                 src={flower.poster + "/100px180"}
                 alt=""
               />
