@@ -10,6 +10,7 @@ import Navbar from "./components/navbar";
 function App() {
   let user = "Evan";
   let login;
+
   return (
     <div className="bg-gray-500 h-screen">
       <Navbar />
