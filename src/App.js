@@ -8,7 +8,7 @@ import Login from "./components/login";
 import Navbar from "./components/navbar";
 
 function App() {
-  let user;
+  let user = "Evan";
   let login;
   return (
     <div className="bg-gray-500 h-screen">
@@ -23,16 +23,13 @@ function App() {
             element={(props) => <AddReview {...props} user={user} />}
           />
 
-          <Route
-            path={"/flowers/:id/"}
-            element={(props) => <Flower {...props} user={user} />}
-          />
+          <Route path={"/flowers/:id/"} element={<Flower user={user} />} />
 
           <Route path={"/login"} element={<Login login={login} />} />
 
           <Route path={"/map"} element={<Map />} />
 
-          <Route path={"/flower"} element={<Flower />} />
+          {/* <Route path={"/flower"} element={<Flower />} /> */}
         </Routes>
       </div>
       <div className="container mx-auto bg-gray-200 rounded-xl shadow border p-8 m-10">
