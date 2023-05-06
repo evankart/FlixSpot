@@ -38,7 +38,6 @@ function App() {
           React and Tailwind CSS in action
         </p>
       </div>
-      <p id="test">hi test</p>
     </div>
   );
 }
