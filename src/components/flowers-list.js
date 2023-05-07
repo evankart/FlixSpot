@@ -72,11 +72,10 @@ const FlowersList = (props) => {
     <div>
       <form class="w-full">
         <div>
-          <div class="flex flex-wrap -mx-3 mb-6">
+          <div class="flex flex-wrap -mx-3 mb-6 mx-auto">
             <div class="w-1/2 px-3 mb-6 md:mb-0 flex">
               <input
-                class="appearance-none block w-full bg-gray-200 text-gray-700 border border-red-500 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white"
-                id="grid-first-name"
+                class="rounded-full px-2 h-7"
                 type="text"
                 value={searchTitle}
                 onChange={onChangeSearchTitle}
@@ -84,7 +83,7 @@ const FlowersList = (props) => {
               />
             </div>
             <button
-              className="px-4 py-1 bg-gray-200 rounded-lg"
+              className="px-2 py-1 h-8 bg-gray-200 rounded-lg"
               type="button"
               onClick={findByTitle}
             >
@@ -96,8 +95,7 @@ const FlowersList = (props) => {
           <div class="flex flex-wrap -mx-3 mb-6">
             <div class="w-1/2 px-3 mb-6 md:mb-0">
               <select
-                class="appearance-none block w-full bg-gray-200 text-gray-700 border border-red-500 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white"
-                id="grid-first-name"
+                class="rounded-full px-2 h-7 w-full"
                 type="select"
                 value={searchRating}
                 onChange={onChangeSearchRating}

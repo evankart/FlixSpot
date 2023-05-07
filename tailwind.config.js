@@ -6,7 +6,7 @@ module.exports = {
   content: ["./src/**/*.{js,jsx,ts,tsx}"],
   theme: {
     colors: {
-      panda: "oklch(85% 0.095 180)",
+      panda: "oklch(69.3% 0.097 27.63)",
       gray: colors.gray,
       white: colors.white,
     },

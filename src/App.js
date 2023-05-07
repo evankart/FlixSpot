@@ -14,7 +14,7 @@ function App() {
   return (
     <div className="bg-gray-500 h-screen">
       <Navbar />
-      <div className="m-3 bg-panda rounded-lg  mx-auto py-1">
+      <div className="bg-panda rounded-lg  mx-auto py-1">
         <Routes>
           <Route path={"/flowers"} element={<FlowersList />} />
           <Route path={"/"} element={<FlowersList />} />
