@@ -2,9 +2,11 @@ import { useState, useEffect } from "react";
 import FlowerDataService from "../services/flowers";
 import { Link, useParams } from "react-router-dom";
 import moment from "moment";
+import { useAuth0 } from "@auth0/auth0-react";
 
 const Flower = (props) => {
   let { id } = useParams();
+  const { isAuthenticated } = useAuth0();
 
   const [flower, setFlower] = useState({
     id: id,
@@ -39,7 +41,7 @@ const Flower = (props) => {
       <div className="mx-auto w-1/2] p-5">
         <h1 className="text-center font-bold text-lg">{flower.title}</h1>
         <p>{flower.plot}</p>
-        {props.user && (
+        {isAuthenticated && (
           <Link to={"/flowers/" + id + "/review"}>Add Review</Link>
         )}
         <h1>Reviews</h1>
@@ -48,7 +50,7 @@ const Flower = (props) => {
           console.log(rev.user_id);
           console.log(props.user_id);
           return (
-            props.user && (
+            isAuthenticated && (
               <div>
                 <h3 className="text-sm">
                   {`${rev.name} reviewed on ${moment(rev.date).format(

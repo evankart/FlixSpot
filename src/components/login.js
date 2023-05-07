@@ -1,6 +1,16 @@
 import { useState } from "react";
+import { useAuth0 } from "@auth0/auth0-react";
 
 const Login = (props) => {
+  const { user, isAuthenticated, loginWithRedirect, logout } = useAuth0();
+
+  let userName;
+  if (user) {
+    userName = user.name;
+  } else {
+    userName = "";
+  }
+  console.log(userName);
   const [name, setName] = useState("");
   const [id, setId] = useState("");
 
@@ -16,12 +26,12 @@ const Login = (props) => {
     console.log(`id: ${id}`);
   };
 
-  const login = () => {
-    props.login({ name: name, id: id });
-    props.history.push("/");
-    console.log(`username: ${name}`);
-    console.log(`id: ${id}`);
-  };
+  // const login = () => {
+  //   props.login({ name: name, id: id });
+  //   props.history.push("/");
+  //   console.log(`username: ${name}`);
+  //   console.log(`id: ${id}`);
+  // };
 
   return (
     <div className="App">
@@ -43,7 +53,12 @@ const Login = (props) => {
           onChange={onChangeId}
           className="my-2 px-2 rounded-xl"
         />
-        <button onClick={login}>Submit</button>
+        {!isAuthenticated && (
+          <button onClick={() => loginWithRedirect()}>Log In</button>
+        )}
+        {isAuthenticated && (
+          <button onClick={() => logout()}>Log Out {userName}</button>
+        )}
       </form>
     </div>
   );
