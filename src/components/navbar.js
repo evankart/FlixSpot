@@ -1,21 +1,23 @@
 import { Link } from "react-router-dom";
 import React from "react";
+import { useAuth0 } from "@auth0/auth0-react";
 
-export default function Navbar() {
-  const [user, setUser] = React.useState(null);
-
-  async function login(user = null) {
-    //default user to null
-    setUser(user);
-  }
-
-  async function logout() {
-    setUser(null);
-  }
+export default function Navbar(props) {
+  const { user, isAuthenticated, logout, loginWithRedirect } = useAuth0();
 
   function toggleMobileMenu() {
     document.querySelector("#menu-dropdown-div").classList.toggle("hidden");
   }
+  let profilePicture;
+
+  console.log(props.profilePicture);
+  if (props.profilePicture) {
+    profilePicture = props.profilePicture;
+  } else {
+    profilePicture =
+      "https://images.unsplash.com/photo-1523730205978-59fd1b2965e3?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=908&q=80";
+  }
+  // https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80
   return (
     <>
       <nav class="bg-gray-800">
@@ -114,7 +116,7 @@ export default function Navbar() {
                     <Link
                       to={"/login"}
                       className="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium"
-                      onClick={login}
+                      onClick={loginWithRedirect}
                     >
                       Login
                     </Link>
@@ -136,7 +138,7 @@ export default function Navbar() {
                     <span class="sr-only">Open user menu</span>
                     <img
                       class="h-8 w-8 rounded-full"
-                      src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                      src={profilePicture}
                       alt=""
                       onClick={() => {
                         let menu = document.getElementById("profile-dropdown");
@@ -190,6 +192,7 @@ export default function Navbar() {
                     role="menuitem"
                     tabindex="-1"
                     id="user-menu-item-2"
+                    onClick={logout}
                   >
                     Sign out
                   </a>
@@ -222,12 +225,23 @@ export default function Navbar() {
             >
               Map
             </a>
-            <a
-              href="/login"
-              class="text-gray-300 hover:bg-gray-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium"
-            >
-              Login
-            </a>
+            {!user ? (
+              <a
+                href="/login"
+                class="text-gray-300 hover:bg-gray-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium"
+                onClick={loginWithRedirect}
+              >
+                Login
+              </a>
+            ) : (
+              <a
+                href="/login"
+                class="text-gray-300 hover:bg-gray-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium"
+                onClick={logout}
+              >
+                Logout
+              </a>
+            )}
           </div>
         </div>
       </nav>

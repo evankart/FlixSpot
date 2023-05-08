@@ -6,14 +6,19 @@ import Map from "./components/map";
 import Flower from "./components/flower";
 import Login from "./components/login";
 import Navbar from "./components/navbar";
+import { useAuth0 } from "@auth0/auth0-react";
 
 function App() {
-  let user = "Evan";
-  let login;
+  const { user } = useAuth0();
+  let profilePicture;
+  if (user) {
+    profilePicture = user.picture;
+  } else {
+  }
 
   return (
     <div className="bg-gray-500 h-screen">
-      <Navbar />
+      <Navbar profilePicture={profilePicture} />
       <div className="bg-panda rounded-lg  mx-auto py-1">
         <Routes>
           <Route path={"/flowers"} element={<FlowersList />} />
@@ -26,7 +31,7 @@ function App() {
 
           <Route path={"/flowers/:id/"} element={<Flower user={user} />} />
 
-          <Route path={"/login"} element={<Login login={login} />} />
+          <Route path={"/login"} element={<Login />} />
 
           <Route path={"/map"} element={<Map />} />
 
