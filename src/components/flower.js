@@ -5,6 +5,9 @@ import moment from "moment";
 import { useAuth0 } from "@auth0/auth0-react";
 
 const Flower = (props) => {
+  // let userId = props.user.sub;
+  let userId = "1234";
+
   let { id } = useParams();
   const { isAuthenticated } = useAuth0();
 
@@ -48,9 +51,12 @@ const Flower = (props) => {
 
         {flower.reviews.map((rev, index) => {
           console.log(rev.user_id);
-          console.log(props.user_id);
+          console.log(rev);
+
+          console.log(props.user);
           return (
-            isAuthenticated && (
+            isAuthenticated &&
+            rev.user_id === userId && (
               <div>
                 <h3 className="text-sm">
                   {`${rev.name} reviewed on ${moment(rev.date).format(
@@ -59,6 +65,14 @@ const Flower = (props) => {
                   {index + 1}
                 </h3>
                 <p className="text-xs">{rev.review}</p>
+                <Link
+                  to={{
+                    pathname: "/flowers/" + id + "/review",
+                    state: { currentReview: rev },
+                  }}
+                >
+                  Edit
+                </Link>
                 <button>Edit</button>
                 <button>Delete</button>
               </div>
