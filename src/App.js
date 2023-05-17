@@ -10,6 +10,7 @@ import { useAuth0 } from "@auth0/auth0-react";
 
 function App() {
   const { user } = useAuth0();
+  console.log(user);
 
   let profilePicture;
   if (user) {
@@ -26,7 +27,7 @@ function App() {
 
           <Route
             path={"/flowers/:id/review"}
-            element={(props) => <AddReview {...props} user={user} />}
+            element={<AddReview user={user} />}
           />
 
           <Route path={"/flowers/:id/"} element={<Flower user={user} />} />

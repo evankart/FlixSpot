@@ -45,9 +45,11 @@ const Flower = (props) => {
         <h1 className="text-center font-bold text-lg">{flower.title}</h1>
         <p>{flower.plot}</p>
         {isAuthenticated && (
-          <Link to={"/flowers/" + id + "/review"}>Add Review</Link>
+          <Link className="leading-10" to={"/flowers/" + id + "/review"}>
+            Add Review
+          </Link>
         )}
-        <h1>Reviews</h1>
+        <h1>Reviews:</h1>
 
         {flower.reviews.map((rev, index) => {
           console.log(rev.user_id);
@@ -65,15 +67,7 @@ const Flower = (props) => {
                   {index + 1}
                 </h3>
                 <p className="text-xs">{rev.review}</p>
-                <Link
-                  to={{
-                    pathname: "/flowers/" + id + "/review",
-                    state: { currentReview: rev },
-                  }}
-                >
-                  Edit
-                </Link>
-                <button>Edit</button>
+                <Link to={"/flowers/" + id + "/review"}>Edit</Link>
                 <button>Delete</button>
               </div>
             )

@@ -121,11 +121,13 @@ const FlowersList = (props) => {
         {flowers.map((flower) => {
           return (
             <div className="mx-auto max-w-[400px] sm:w-1/3 px-2 text-center justify-center mb-0 font-bold">
-              <img
-                className="w-full  aspect-[2/3] object-cover mb-2"
-                src={flower.poster + "/100px180"}
-                alt=""
-              />
+              <Link to={"/flowers/" + flower._id}>
+                <img
+                  className="w-full  aspect-[2/3] object-cover mb-2"
+                  src={flower.poster + "/100px180"}
+                  alt=""
+                />
+              </Link>
               <div className="flex justify-between text-xs w-[90%] mx-auto">
                 <p> {flower.rated}</p>
                 <Link to={"/flowers/" + flower._id}>View Reviews</Link>

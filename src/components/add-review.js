@@ -2,81 +2,86 @@ import { useState } from "react";
 import FlowerDataService from "../services/flowers";
 import { Link, useParams } from "react-router-dom";
 
-// const AddReview = (props) => {
-//   let { id } = useParams();
+const AddReview = (props) => {
+  let { id } = useParams();
 
-//   let editing = false;
-//   let initialReviewState = "";
+  if (props.user) {
+    // let user_id = props.user.sub;
+    let user_id = "1234";
+  }
 
-//   if (props.location.state && props.location.state.currentReview) {
-//     editing = true;
-//     initialReviewState = props.location.state.currentReview.review;
-//   }
+  let editing = false;
+  let initialReviewState = "";
 
-//   const [review, setReview] = useState(initialReviewState);
-//   const [submitted, setSubmitted] = useState(false);
+  // if (props.location.state && props.location.state.currentReview) {
+  //   editing = true;
+  //   initialReviewState = props.location.state.currentReview.review;
+  // }
 
-//   const onChangeReview = (e) => {
-//     const review = e.target.value;
-//     setReview(review);
-//   };
+  const [review, setReview] = useState(initialReviewState);
+  const [submitted, setSubmitted] = useState(false);
 
-//   let data;
-//   const saveReview = () => {
-//     data = {
-//       review: review,
-//       name: props.user.name,
-//       user_id: props.user.id,
-//       flower_id: id,
-//     };
-//   };
+  const onChangeReview = (e) => {
+    const review = e.target.value;
+    setReview(review);
+    console.log(review);
+  };
 
-//   if (editing) {
-//     data.review_id = props.location.state.currentReview._id;
+  let data;
+  const saveReview = () => {
+    data = {
+      review: review,
+      name: props.user.name,
+      user_id: props.user.sub,
+      flower_id: id,
+    };
 
-//     FlowerDataService.updateReview(data)
-//       .then((response) => {
-//         setSubmitted(true);
-//         console.log(response.data);
-//       })
-//       .catch((e) => {
-//         console.log(e);
-//       });
-//   } else {
-//     FlowerDataService.createReview(data)
-//       .then((response) => {
-//         setSubmitted(true);
-//       })
-//       .catch((e) => {
-//         console.log(e);
-//       });
-//   }
-//   return (
-//     <div>
-//       <p>test</p>
-//       {submitted ? (
-//         <div>
-//           <h4>Review submitted successfully</h4>
-//           <Link to={"/flowers/" + id}>Back to Flower</Link>
-//         </div>
-//       ) : (
-//         <div>
-//           <input type="text" value={review} onChange={onChangeReview}>
-//             Review
-//           </input>
-//           <button onClick={{ saveReview }}>Submit</button>
-//         </div>
-//       )}
-//     </div>
-//   );
-// };
+    console.log(data.review, data.name, data.user_id, data.flower_id);
 
-function AddReview() {
+    if (editing) {
+      FlowerDataService.updateReview(data)
+        .then((response) => {
+          setSubmitted(true);
+          console.log(response.data);
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    } else {
+      FlowerDataService.createReview(data)
+        .then((response) => {
+          setSubmitted(true);
+          console.log(response.data);
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    }
+  };
+
   return (
     <div>
-      <p>test</p>
+      {submitted ? (
+        <div>
+          <h4>Review submitted successfully</h4>
+          <Link
+            to={"/flowers/" + id}
+            onClick={() => {
+              setSubmitted(false);
+            }}
+          >
+            Back to Flower
+          </Link>
+        </div>
+      ) : (
+        <div>
+          <input type="text" value={review} onChange={onChangeReview} />
+
+          <button onClick={saveReview}>Submit</button>
+        </div>
+      )}
     </div>
   );
-}
+};
 
 export default AddReview;
