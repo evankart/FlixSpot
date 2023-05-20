@@ -130,11 +130,13 @@ const FlowersList = (props) => {
           return (
             <div className="mx-auto max-w-[400px] sm:w-1/3 px-2 text-center justify-center mb-0 font-bold">
               <Link to={"/flowers/" + flower._id}>
-                <img
-                  className="w-full aspect-[2/3] object-cover mb-2 hover:saturate-[.65] transition-all"
-                  src={posterSrc}
-                  alt=""
-                />
+                <div className="bg-gray-500">
+                  <img
+                    className=" w-full aspect-[2/3] object-cover mb-2 hover:opacity-80 transition-all"
+                    src={posterSrc}
+                    alt=""
+                  />
+                </div>
               </Link>
               <div className="flex justify-between text-xs w-[90%] mx-auto">
                 <p> {flower.rated}</p>

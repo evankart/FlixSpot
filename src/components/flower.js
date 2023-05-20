@@ -75,10 +75,18 @@ const Flower = (props) => {
                   {index + 1}
                 </h3>
                 <p className="text-xs">{rev.review}</p>
+
                 <Link to={"/flowers/" + id + "/review"}>Edit</Link>
                 <button
                   onClick={() => {
-                    deleteReview(rev._id, index);
+                    if (rev.user_id === userId) {
+                      deleteReview(rev._id, index);
+                    } else {
+                      console.log("failed");
+                      alert(
+                        "Sorry, you can only edit or delete your own reviews"
+                      );
+                    }
                   }}
                 >
                   Delete
