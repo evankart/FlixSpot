@@ -9,6 +9,7 @@ const Flower = (props) => {
   let userId = "auth0|64068f7b1f5a4051145edb68";
 
   let { id } = useParams();
+  console.log("id: ", id);
   const { isAuthenticated } = useAuth0();
 
   const [flower, setFlower] = useState({
@@ -32,13 +33,11 @@ const Flower = (props) => {
     getFlower(id);
   }, [id]);
 
-  useEffect(() => {
-    console.log("flower: ", flower);
-  }, []);
+  useEffect(() => {}, []);
 
   const deleteReview = (reviewId, index) => {
-    FlowerDataService.deleteReview(reviewId, id)
-      .then((response) => {
+    FlowerDataService.deleteReview(reviewId, userId)
+      .then(() => {
         setFlower((prevState) => {
           prevState.reviews.splice(index, 1);
           return { ...prevState };
@@ -48,6 +47,7 @@ const Flower = (props) => {
         console.log(e);
       });
   };
+  console.log("reviews: ", flower.reviews);
 
   return (
     <div className="flex">
@@ -64,6 +64,7 @@ const Flower = (props) => {
         <h1>Reviews:</h1>
 
         {flower.reviews.map((rev, index) => {
+          console.log("rev: ", rev.user_id);
           return (
             isAuthenticated &&
             rev.user_id === userId && (
