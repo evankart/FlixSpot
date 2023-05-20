@@ -10,7 +10,6 @@ export default function Navbar(props) {
   }
   let profilePicture;
 
-  console.log(props.profilePicture);
   if (props.profilePicture) {
     profilePicture = props.profilePicture;
   } else {

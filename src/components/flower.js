@@ -6,7 +6,7 @@ import { useAuth0 } from "@auth0/auth0-react";
 
 const Flower = (props) => {
   // let userId = props.user.sub;
-  let userId = "1234";
+  let userId = "auth0|64068f7b1f5a4051145edb68";
 
   let { id } = useParams();
   const { isAuthenticated } = useAuth0();
@@ -22,7 +22,6 @@ const Flower = (props) => {
     FlowerDataService.get(id)
       .then((response) => {
         setFlower(response.data);
-        console.log(response.data);
       })
       .catch((e) => {
         console.log(e);
@@ -36,6 +35,19 @@ const Flower = (props) => {
   useEffect(() => {
     console.log("flower: ", flower);
   }, []);
+
+  const deleteReview = (reviewId, index) => {
+    FlowerDataService.deleteReview(reviewId, id)
+      .then((response) => {
+        setFlower((prevState) => {
+          prevState.reviews.splice(index, 1);
+          return { ...prevState };
+        });
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
 
   return (
     <div className="flex">
@@ -52,10 +64,6 @@ const Flower = (props) => {
         <h1>Reviews:</h1>
 
         {flower.reviews.map((rev, index) => {
-          console.log(rev.user_id);
-          console.log(rev);
-
-          console.log(props.user);
           return (
             isAuthenticated &&
             rev.user_id === userId && (
@@ -68,7 +76,13 @@ const Flower = (props) => {
                 </h3>
                 <p className="text-xs">{rev.review}</p>
                 <Link to={"/flowers/" + id + "/review"}>Edit</Link>
-                <button>Delete</button>
+                <button
+                  onClick={() => {
+                    deleteReview(rev._id, index);
+                  }}
+                >
+                  Delete
+                </button>
               </div>
             )
           );
