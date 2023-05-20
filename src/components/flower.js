@@ -66,8 +66,7 @@ const Flower = (props) => {
         {flower.reviews.map((rev, index) => {
           console.log("rev: ", rev.user_id);
           return (
-            isAuthenticated &&
-            rev.user_id === userId && (
+            isAuthenticated && (
               <div>
                 <h3 className="text-sm">
                   {`${rev.name} reviewed on ${moment(rev.date).format(

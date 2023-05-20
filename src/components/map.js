@@ -1,3 +1,3 @@
 export default function Map() {
-  return <div className="App">Map</div>;
+  return <div className="h-[90vh] overflow-y-hidden">Map</div>;
 }

@@ -168,7 +168,7 @@ export default function Navbar(props) {
                 >
                   {/* <!-- Active: "bg-gray-100", Not Active: "" --> */}
                   <a
-                    href="#"
+                    href="/profile"
                     class="block px-4 py-2 text-sm text-gray-700"
                     role="menuitem"
                     tabindex="-1"
@@ -177,7 +177,7 @@ export default function Navbar(props) {
                     Your Profile
                   </a>
                   <a
-                    href="#"
+                    href="/settings"
                     class="block px-4 py-2 text-sm text-gray-700"
                     role="menuitem"
                     tabindex="-1"
@@ -185,16 +185,26 @@ export default function Navbar(props) {
                   >
                     Settings
                   </a>
-                  <a
-                    href="#"
-                    class="block px-4 py-2 text-sm text-gray-700"
-                    role="menuitem"
-                    tabindex="-1"
-                    id="user-menu-item-2"
-                    onClick={logout}
-                  >
-                    Sign out
-                  </a>
+
+                  {user ? (
+                    <a
+                      onClick={logout}
+                      class="block px-4 py-2 text-sm text-gray-700"
+                      role="menuitem"
+                      tabindex="-1"
+                      id="user-menu-item-2"
+                    >
+                      Logout User
+                    </a>
+                  ) : (
+                    <Link
+                      to={"/login"}
+                      class="block px-4 py-2 text-sm text-gray-700"
+                      onClick={loginWithRedirect}
+                    >
+                      Login
+                    </Link>
+                  )}
                 </div>
               </div>
             </div>
@@ -203,31 +213,34 @@ export default function Navbar(props) {
 
         {/* <!-- Mobile menu, show/hide based on menu state. --> */}
         <div class="sm:hidden" id="mobile-menu">
-          <div id="menu-dropdown-div" class="space-y-1 px-2 pb-3 pt-2">
+          <div
+            id="menu-dropdown-div"
+            class="hidden space-y-1 px-2 pb-3 pt-2 absolute z-50 bg-gray-800 w-screen rounded-b-lg"
+          >
             {/* <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" --> */}
             <a
               href="/"
-              class="bg-gray-900 text-white block rounded-md px-3 py-2 text-base font-medium"
+              class=" hover:bg-gray-900 text-white block rounded-md px-3 py-2 text-base font-medium"
               aria-current="page"
             >
               Home
             </a>
             <a
               href="/flowers"
-              class="text-gray-300 hover:bg-gray-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium"
+              class="text-gray-300 hover:bg-gray-900 hover:text-white block rounded-md px-3 py-2 text-base font-medium"
             >
               Flowers
             </a>
             <a
               href="/map"
-              class="text-gray-300 hover:bg-gray-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium"
+              class="text-gray-300 hover:bg-gray-900 hover:text-white block rounded-md px-3 py-2 text-base font-medium"
             >
               Map
             </a>
             {!user ? (
               <a
                 href="/login"
-                class="text-gray-300 hover:bg-gray-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium"
+                class="text-gray-300 hover:bg-gray-900 hover:text-white block rounded-md px-3 py-2 text-base font-medium"
                 onClick={loginWithRedirect}
               >
                 Login
@@ -235,7 +248,7 @@ export default function Navbar(props) {
             ) : (
               <a
                 href="/login"
-                class="text-gray-300 hover:bg-gray-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium"
+                class="text-gray-300 hover:bg-gray-900 hover:text-white block rounded-md px-3 py-2 text-base font-medium"
                 onClick={logout}
               >
                 Logout

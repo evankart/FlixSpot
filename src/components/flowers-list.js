@@ -119,12 +119,20 @@ const FlowersList = (props) => {
 
       <div className="flex flex-wrap max-w-7xl mx-auto">
         {flowers.map((flower) => {
+          console.log(flower.poster);
+          let posterSrc;
+          if (!flower.poster) {
+            posterSrc =
+              "https://images.unsplash.com/photo-1507608616759-54f48f0af0ee?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=387&q=80";
+          } else {
+            posterSrc = flower.poster + "/100px180";
+          }
           return (
             <div className="mx-auto max-w-[400px] sm:w-1/3 px-2 text-center justify-center mb-0 font-bold">
               <Link to={"/flowers/" + flower._id}>
                 <img
-                  className="w-full  aspect-[2/3] object-cover mb-2"
-                  src={flower.poster + "/100px180"}
+                  className="w-full aspect-[2/3] object-cover mb-2 hover:saturate-[.65] transition-all"
+                  src={posterSrc}
                   alt=""
                 />
               </Link>
