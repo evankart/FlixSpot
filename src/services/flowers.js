@@ -1,6 +1,6 @@
 import axios from "axios";
 
-// const base = "http://localhost:5000";
+// const base = "http://localhost:5000/api/vi/flowers";
 // const base = "https://flowermap-backend.onrender.com";
 const base = "https://flowermap-backend.onrender.com/api/v1/flowers";
 
