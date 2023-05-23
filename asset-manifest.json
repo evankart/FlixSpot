@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/flowermap-frontend/static/css/main.7aeccbc3.css",
+    "main.js": "/flowermap-frontend/static/js/main.b9f6abc1.js",
+    "index.html": "/flowermap-frontend/index.html",
+    "main.7aeccbc3.css.map": "/flowermap-frontend/static/css/main.7aeccbc3.css.map",
+    "main.b9f6abc1.js.map": "/flowermap-frontend/static/js/main.b9f6abc1.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.7aeccbc3.css",
+    "static/js/main.b9f6abc1.js"
+  ]
+}
