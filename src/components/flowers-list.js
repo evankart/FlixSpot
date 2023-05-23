@@ -16,7 +16,6 @@ const FlowersList = (props) => {
   const retrieveFlowers = () => {
     FlowerDataService.getAll()
       .then((response) => {
-        console.log(response.data);
         setFlowers(response.data.flowers);
       })
       .catch((e) => {
@@ -27,7 +26,6 @@ const FlowersList = (props) => {
   const retrieveRatings = () => {
     FlowerDataService.getRatings()
       .then((response) => {
-        console.log(response.data);
         setRatings(["All Ratings"].concat(response.data));
       })
       .catch((e) => {
@@ -48,7 +46,6 @@ const FlowersList = (props) => {
   const find = (query, by) => {
     FlowerDataService.find(query, by)
       .then((response) => {
-        console.log(response.data);
         setFlowers(response.data.flowers);
       })
       .catch((e) => {
@@ -72,30 +69,30 @@ const FlowersList = (props) => {
     <div>
       <form class="w-full">
         <div>
-          <div class="flex flex-wrap -mx-3 mb-6 mx-auto">
-            <div class="w-1/2 px-3 mb-6 md:mb-0 flex">
+          <div class="flex ">
+            <div class="mb-6 md:mb-0 mx-auto w-11/12">
               <input
-                class="rounded-full px-2 h-7"
+                class="rounded-full px-2 mr-3 h-7 w-48"
                 type="text"
                 value={searchTitle}
                 onChange={onChangeSearchTitle}
                 placeholder="Search by Name"
               />
+              <button
+                className="bg-teal font-medium px-2 py-1 h-8 rounded-lg w-36 bg-"
+                type="button"
+                onClick={findByTitle}
+              >
+                Search by Name
+              </button>
             </div>
-            <button
-              className="px-2 py-1 h-8 bg-gray-200 rounded-lg"
-              type="button"
-              onClick={findByTitle}
-            >
-              Search by Name
-            </button>
           </div>
         </div>
         <div>
-          <div class="flex flex-wrap -mx-3 mb-6">
-            <div class="w-1/2 px-3 mb-6 md:mb-0">
+          <div class="flex ">
+            <div class=" mb-6 md:mb-0 mx-auto w-11/12">
               <select
-                class="rounded-full px-2 h-7 w-full"
+                class="rounded-full px-2 mr-3 h-7 w-48"
                 type="select"
                 value={searchRating}
                 onChange={onChangeSearchRating}
@@ -105,21 +102,20 @@ const FlowersList = (props) => {
                   return <option value={rating}>{rating}</option>;
                 })}
               </select>
+              <button
+                className="bg-teal font-medium px-2 py-1 h-8 rounded-lg w-36"
+                type="button"
+                onClick={findByRating}
+              >
+                Search by Rating
+              </button>
             </div>
-            <button
-              className="px-4 py-1 bg-gray-200 rounded-lg"
-              type="button"
-              onClick={findByRating}
-            >
-              Search by Rating
-            </button>
           </div>
         </div>
       </form>
 
       <div className="flex flex-wrap max-w-7xl mx-auto">
         {flowers.map((flower) => {
-          console.log(flower.poster);
           let posterSrc;
           if (!flower.poster) {
             posterSrc =

@@ -20,7 +20,7 @@ function App() {
   }
 
   return (
-    <div className="bg-panda h-screen">
+    <div className="bg-panda h-screen overflow-x-hidden">
       <Navbar profilePicture={profilePicture} />
       <MUIButton>Test Material UI</MUIButton>
 
