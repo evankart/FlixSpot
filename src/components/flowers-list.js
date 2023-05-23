@@ -76,7 +76,7 @@ const FlowersList = (props) => {
                 type="text"
                 value={searchTitle}
                 onChange={onChangeSearchTitle}
-                placeholder="Search by Name ---"
+                placeholder="Search by Name"
               />
               <button
                 className="bg-teal font-medium px-2 py-1 h-8 rounded-lg w-36 bg-"
