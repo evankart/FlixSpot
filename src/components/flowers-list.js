@@ -134,6 +134,7 @@ const FlowersList = (props) => {
                   />
                 </div>
               </Link>
+              
               <div className="flex justify-between text-xs w-[90%] mx-auto">
                 <p> {flower.rated}</p>
                 <Link to={"/flowers/" + flower._id}>View Reviews</Link>
