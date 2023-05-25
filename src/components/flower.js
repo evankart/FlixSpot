@@ -6,8 +6,9 @@ import { useAuth0 } from "@auth0/auth0-react";
 import Profile from "./profile";
 
 const Flower = (props) => {
-  // let userId = props.user.sub;
-  let userId = "auth0|64068f7b1f5a4051145edb68";
+  let userId;
+  console.log(props.user);
+  props.user ? (userId = props.user.sub) : (userId = "");
 
   let { id } = useParams();
   const { isAuthenticated } = useAuth0();
@@ -53,7 +54,7 @@ const Flower = (props) => {
   return (
     <div className="flex flex-col sm:flex-row">
       <img
-        className="w-2/3 sm:w-1/2 mx-auto"
+        className="w-2/3 sm:w-1/2 mx-auto h-max-[90vh]"
         src={flower.poster + "/100px180"}
         alt=""
       />
