@@ -104,24 +104,20 @@ export default function Navbar(props) {
                   >
                     Map
                   </Link>
-                  {user ? (
-                    <a
-                      onClick={logout}
-                      class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium"
-                    >
-                      Logout User
-                    </a>
-                  ) : (
-                    <Link
-                      to={"/login"}
-                      className="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium"
-                      onClick={loginWithRedirect}
-                    >
-                      Login
-                    </Link>
-                  )}
                 </div>
               </div>
+              {user ? (
+                <p class="ml-auto text-gray-300   rounded-md px-3 py-2 text-sm font-medium">
+                  Hi, {user.given_name ? user.given_name : user.name}
+                </p>
+              ) : (
+                <button
+                  className="hidden sm:block ml-auto text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium"
+                  onClick={loginWithRedirect}
+                >
+                  Log in
+                </button>
+              )}
             </div>
             <div class="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
               {/* <!-- Profile dropdown --> */}
@@ -142,7 +138,6 @@ export default function Navbar(props) {
                       onClick={() => {
                         let menu = document.getElementById("profile-dropdown");
                         menu.classList.toggle("hidden");
-                        console.log("click");
                       }}
                     />
                   </button>
@@ -187,7 +182,7 @@ export default function Navbar(props) {
                   </a>
 
                   {user ? (
-                    <a
+                    <button
                       onClick={logout}
                       class="block px-4 py-2 text-sm text-gray-700"
                       role="menuitem"
@@ -195,15 +190,14 @@ export default function Navbar(props) {
                       id="user-menu-item-2"
                     >
                       Logout User
-                    </a>
+                    </button>
                   ) : (
-                    <Link
-                      to={"/login"}
+                    <button
                       class="block px-4 py-2 text-sm text-gray-700"
                       onClick={loginWithRedirect}
                     >
                       Login
-                    </Link>
+                    </button>
                   )}
                 </div>
               </div>
@@ -238,21 +232,19 @@ export default function Navbar(props) {
               Map
             </a>
             {!user ? (
-              <a
-                href="/login"
+              <button
                 class="text-gray-300 hover:bg-gray-900 hover:text-white block rounded-md px-3 py-2 text-base font-medium"
                 onClick={loginWithRedirect}
               >
                 Login
-              </a>
+              </button>
             ) : (
-              <a
-                href="/login"
+              <button
                 class="text-gray-300 hover:bg-gray-900 hover:text-white block rounded-md px-3 py-2 text-base font-medium"
                 onClick={logout}
               >
                 Logout
-              </a>
+              </button>
             )}
           </div>
         </div>

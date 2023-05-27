@@ -8,7 +8,7 @@ module.exports = {
     colors: {
       panda: "oklch(69.3% 0.097 27.63)",
       teal: "oklch(85.3% 0.15 180.63)",
-
+      "teal-dark": "oklch(82% 0.15 180.63)",
       gray: colors.gray,
       white: colors.white,
     },

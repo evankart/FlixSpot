@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import FlowerDataService from "../services/flowers";
 import { Link } from "react-router-dom";
+import Button from "./button";
 
 const FlowersList = (props) => {
   const [flowers, setFlowers] = useState([]);
@@ -67,49 +68,34 @@ const FlowersList = (props) => {
 
   return (
     <div>
-      <form class="w-full">
-        <div>
-          <div class="flex ">
-            <div class="mb-6 md:mb-0 mx-auto w-11/12">
-              <input
-                class="rounded-full px-2 mr-3 h-7 w-48"
-                type="text"
-                value={searchTitle}
-                onChange={onChangeSearchTitle}
-                placeholder="Search by Name"
-              />
-              <button
-                className="bg-teal font-medium px-2 py-1 h-8 rounded-lg w-36 bg-"
-                type="button"
-                onClick={findByTitle}
-              >
-                Search by Name
-              </button>
-            </div>
+      <form class="w-full flex wrap m-3 mt-0">
+        <div class="w-1/2 flex">
+          <input
+            class="rounded-full px-2 h-7 w-8/12 mr-2"
+            type="text"
+            value={searchTitle}
+            onChange={onChangeSearchTitle}
+            placeholder="Search by Name"
+          />
+          <div class="w-3/12">
+            <Button btnText={"Go"} btnAction={findByTitle} />
           </div>
         </div>
-        <div>
-          <div class="flex ">
-            <div class=" mb-6 md:mb-0 mx-auto w-11/12">
-              <select
-                class="rounded-full px-2 mr-3 h-7 w-48"
-                type="select"
-                value={searchRating}
-                onChange={onChangeSearchRating}
-                placeholder="Search by Rating"
-              >
-                {ratings.map((rating) => {
-                  return <option value={rating}>{rating}</option>;
-                })}
-              </select>
-              <button
-                className="bg-teal font-medium px-2 py-1 h-8 rounded-lg w-36"
-                type="button"
-                onClick={findByRating}
-              >
-                Search by Rating
-              </button>
-            </div>
+
+        <div class="w-1/2 flex">
+          <select
+            class="rounded-full px-2 h-7 w-8/12 mr-2"
+            type="select"
+            value={searchRating}
+            onChange={onChangeSearchRating}
+            placeholder="Search by Rating"
+          >
+            {ratings.map((rating) => {
+              return <option value={rating}>{rating}</option>;
+            })}
+          </select>
+          <div class="w-3/12">
+            <Button btnText={"Go"} btnAction={findByRating} />
           </div>
         </div>
       </form>
@@ -134,7 +120,7 @@ const FlowersList = (props) => {
                   />
                 </div>
               </Link>
-              
+
               <div className="flex justify-between text-xs w-[90%] mx-auto">
                 <p> {flower.rated}</p>
                 <Link to={"/flowers/" + flower._id}>View Reviews</Link>

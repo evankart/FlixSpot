@@ -5,11 +5,6 @@ import { Link, useParams } from "react-router-dom";
 const AddReview = (props) => {
   let { id } = useParams();
 
-  if (props.user) {
-    // let user_id = props.user.sub;
-    let user_id = "1234";
-  }
-
   let editing = false;
   let initialReviewState = "";
 
@@ -24,7 +19,6 @@ const AddReview = (props) => {
   const onChangeReview = (e) => {
     const review = e.target.value;
     setReview(review);
-    console.log(review);
   };
 
   let data;
@@ -35,8 +29,6 @@ const AddReview = (props) => {
       user_id: props.user.sub,
       flower_id: id,
     };
-
-    console.log(data.review, data.name, data.user_id, data.flower_id);
 
     if (editing) {
       FlowerDataService.updateReview(data)
@@ -57,6 +49,9 @@ const AddReview = (props) => {
           console.log(e);
         });
     }
+
+    let wrapper = document.querySelector("#addReviewWrapper");
+    wrapper.classList.toggle("hidden");
   };
 
   return (
@@ -75,9 +70,15 @@ const AddReview = (props) => {
         </div>
       ) : (
         <div>
-          <input type="text" value={review} onChange={onChangeReview} />
+          <textarea
+            value={review}
+            className="w-full"
+            onChange={onChangeReview}
+          />
 
-          <button onClick={saveReview}>Submit</button>
+          <button className="flex ml-auto font-bold" onClick={saveReview}>
+            Submit
+          </button>
         </div>
       )}
     </div>

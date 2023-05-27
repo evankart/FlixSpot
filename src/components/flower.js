@@ -3,11 +3,11 @@ import FlowerDataService from "../services/flowers";
 import { Link, useParams } from "react-router-dom";
 import moment from "moment";
 import { useAuth0 } from "@auth0/auth0-react";
-import Profile from "./profile";
+import AddReview from "./add-review";
 
 const Flower = (props) => {
   let userId;
-  console.log(props.user);
+
   props.user ? (userId = props.user.sub) : (userId = "");
 
   let { id } = useParams();
@@ -34,15 +34,11 @@ const Flower = (props) => {
     getFlower(id);
   }, [id]);
 
-  useEffect(() => {}, []);
-
   const deleteReview = (reviewId, index) => {
     FlowerDataService.deleteReview(reviewId, userId)
       .then(() => {
         setFlower(() => {
-          console.log("flower.reviews pre: ", ...flower.reviews);
           flower.reviews.splice(index, 1);
-          console.log("flower.reviews post: ", ...flower.reviews);
           return { ...flower };
         });
       })
@@ -63,9 +59,25 @@ const Flower = (props) => {
         <h1 className="text-center font-bold text-xl mb-1">{flower.title}</h1>
         <p className="mb-3">{flower.plot}</p>
         {isAuthenticated && (
-          <button className="bg-teal px-2 rounded-xl h-6 font-bold text-sm mb-4">
-            <Link to={"/flowers/" + id + "/review"}>Add a Review</Link>
-          </button>
+          <>
+            {/* <button className="bg-teal px-2 rounded-xl h-6 font-bold text-sm mb-4">
+              <Link to={"/flowers/" + id + "/review"}>Add a Review</Link>
+            </button> */}
+
+            <button
+              onClick={() => {
+                let wrapper = document.querySelector("#addReviewWrapper");
+                wrapper.classList.toggle("hidden");
+                setFlower(flower);
+              }}
+              className="bg-teal px-2 rounded-xl h-6 font-bold text-sm mb-4"
+            >
+              Add a Review
+            </button>
+            <div id="addReviewWrapper" className="hidden">
+              <AddReview user={props.user} />
+            </div>
+          </>
         )}
         <h1 className="font-bold my-2">Reviews:</h1>
 
