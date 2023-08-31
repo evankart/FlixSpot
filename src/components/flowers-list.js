@@ -7,7 +7,14 @@ const FlowersList = (props) => {
   const [flowers, setFlowers] = useState([]);
   const [searchTitle, setSearchTitle] = useState("");
   const [searchRating, setSearchRating] = useState("");
-  const [ratings, setRatings] = useState(["All Ratings", "G"]);
+  const [ratings, setRatings] = useState([
+    "All Ratings",
+    "G",
+    "PG",
+    "PG-13",
+    "R",
+    "Unrated",
+  ]);
 
   useEffect(() => {
     retrieveFlowers();
@@ -69,9 +76,9 @@ const FlowersList = (props) => {
   return (
     <div>
       <form class="w-full flex wrap m-3 mt-0">
-        <div class="w-1/2 flex">
+        <div class="w-1/2 flex items-center">
           <input
-            class="rounded-full px-2 h-7 w-8/12 mr-2"
+            class="rounded-xl px-2 h-6 w-8/12 mr-2"
             type="text"
             value={searchTitle}
             onChange={onChangeSearchTitle}
@@ -82,9 +89,9 @@ const FlowersList = (props) => {
           </div>
         </div>
 
-        <div class="w-1/2 flex">
+        <div class="w-1/2 flex items-center">
           <select
-            class="rounded-full px-2 h-7 w-8/12 mr-2"
+            class="rounded-xl px-2 h-6 w-8/12 mr-2"
             type="select"
             value={searchRating}
             onChange={onChangeSearchRating}
@@ -112,11 +119,16 @@ const FlowersList = (props) => {
           return (
             <div className="mx-auto max-w-[400px] sm:w-1/3 px-2 text-center justify-center mb-0 font-bold">
               <Link to={"/flowers/" + flower._id}>
-                <div className="bg-gray-500">
+                <div className="bg-white">
                   <img
                     className=" w-full aspect-[2/3] object-cover mb-2 hover:opacity-80 transition-all"
-                    src={posterSrc}
                     alt=""
+                    onError={(error) => {
+                      console.log(error);
+                      posterSrc =
+                        "https://images.unsplash.com/photo-1507608616759-54f48f0af0ee?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=387&q=80";
+                    }}
+                    src={posterSrc}
                   />
                 </div>
               </Link>
