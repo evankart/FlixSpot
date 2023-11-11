@@ -7,8 +7,6 @@ import AddReview from "./add-review";
 
 const Movie = (props) => {
   let userId;
-  const [editing, setEditing] = useState("false");
-
   props.user ? (userId = props.user.sub) : (userId = "");
 
   let { id } = useParams();
@@ -96,11 +94,7 @@ const Movie = (props) => {
                 id="addReviewWrapper"
                 // className="hidden"
               >
-                <AddReview
-                  editing={editing}
-                  setEditing={setEditing}
-                  user={props.user}
-                />
+                <AddReview user={props.user} />
               </div>
             </>
           )}

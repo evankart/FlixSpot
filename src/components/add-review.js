@@ -5,6 +5,9 @@ import { useParams } from "react-router-dom";
 const AddReview = (props) => {
   // console.log(`props: `, props);
 
+  // let editing = false;
+  const [editing, setEditing] = useState(false);
+
   let { id } = useParams();
 
   let initialReviewState = "";
@@ -62,33 +65,41 @@ const AddReview = (props) => {
     //   props.setEditing(false);
     // }
 
-    // MovieDataService.createReview(data)
-    //   .then((response) => {
-    //     const val = true;
-    //     setSubmitted(val);
-    //     console.log(response.data);
-    //   })
-    //   .catch((e) => {
-    //     console.log(e);
-    //   });
+    // setReview("");
+    // setSubmitted(true);
 
-    // MovieDataService.updateReview(rev._id, index);
-    // console.log(`editing data: `, data);
-    MovieDataService.updateReview(
-      "6568f326373f0e803811e0a1",
-      "auth0|6568e3c8cc59856df9af6a0e",
-      "test text"
-    )
-      .then((response) => {
-        setSubmitted(true);
-      })
-      .catch((e) => {
-        console.log(e);
-      });
-    props.setEditing(false);
+    if (editing === false) {
+      console.log(props.editing);
 
-    setReview("");
-    setSubmitted(true);
+      MovieDataService.createReview(data)
+        .then((response) => {
+          const val = true;
+          setSubmitted(val);
+          console.log(response.data);
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    } else if (editing === true) {
+      console.log(editing);
+
+      // MovieDataService.updateReview(rev._id, index);
+      console.log(`editing data: `, data);
+      MovieDataService.updateReview(
+        "6568f326373f0e803811e0a1",
+        "auth0|6568e3c8cc59856df9af6a0e",
+        "test text"
+      )
+        .then((response) => {
+          setSubmitted(true);
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+      setEditing(false);
+    } else {
+      console.log("neither");
+    }
   };
 
   return (
@@ -124,6 +135,20 @@ const AddReview = (props) => {
               Submit
             </button>
           </form>
+          <button
+            className="flex ml-auto font-bold"
+            onClick={() => {
+              if (editing === false || editing === undefined) {
+                setEditing(true);
+                console.log(`editing: true`);
+              } else if (editing === true) {
+                setEditing(false);
+                console.log(`editing: false`);
+              }
+            }}
+          >
+            Edit Existing Review
+          </button>
         </>
       )}
     </div>
