@@ -11,7 +11,7 @@ const Flower = (props) => {
   props.user ? (userId = props.user.sub) : (userId = "");
 
   let { id } = useParams();
-  const { isAuthenticated } = useAuth0();
+  const { isAuthenticated, loginWithRedirect } = useAuth0();
 
   const [flower, setFlower] = useState({
     id: id,
@@ -48,76 +48,83 @@ const Flower = (props) => {
   };
 
   return (
-    <div className="flex flex-col sm:flex-row">
-      <img
-        className="w-2/3 sm:w-1/2 mx-auto h-max-[90vh]"
-        src={flower.poster + "/100px180"}
-        alt=""
-      />
+    <div className="my-5">
+      <h1 className="text-center font-poppins font-bold text-2xl mb-3">
+        {flower.title}
+      </h1>
 
-      <div className="mx-auto w-1/2] p-5">
-        <h1 className="text-center font-bold text-xl mb-1">{flower.title}</h1>
-        <p className="mb-3">{flower.plot}</p>
-        {isAuthenticated && (
-          <>
-            {/* <button className="bg-teal px-2 rounded-xl h-6 font-bold text-sm mb-4">
+      <div className="flex flex-col sm:flex-row sm:w-3/4 sm:max-w-[1000px] mx-auto">
+        <img
+          className="w-[400px] mx-auto "
+          src={flower.poster + "/100px180"}
+          alt=""
+        />
+
+        <div className="mx-auto p-5">
+          <p className="mb-3">{flower.plot}</p>
+          {isAuthenticated && (
+            <>
+              {/* <button className="bg-teal px-2 rounded-xl h-6 font-bold text-sm mb-4">
               <Link to={"/flowers/" + id + "/review"}>Add a Review</Link>
             </button> */}
 
-            <button
-              onClick={() => {
-                let wrapper = document.querySelector("#addReviewWrapper");
-                wrapper.classList.toggle("hidden");
-                setFlower(flower);
-              }}
-              className="bg-teal px-2 rounded-xl h-6 font-bold text-sm mb-4"
-            >
-              Add a Review
-            </button>
-            <div id="addReviewWrapper" className="hidden">
-              <AddReview user={props.user} />
-            </div>
-          </>
-        )}
-        <h1 className="font-bold my-2">Reviews:</h1>
+              <button
+                onClick={() => {
+                  let wrapper = document.querySelector("#addReviewWrapper");
+                  wrapper.classList.toggle("hidden");
+                  setFlower(flower);
+                }}
+                className="bg-teal px-2 rounded-xl h-6 font-bold text-sm mb-4"
+              >
+                Add a Review
+              </button>
+              <div id="addReviewWrapper" className="hidden">
+                <AddReview user={props.user} />
+              </div>
+            </>
+          )}
+          <h1 className="font-bold my-2">Reviews:</h1>
 
-        {flower.reviews.map((rev, index) => {
-          return (
-            <div className="mb-3">
-              <h3 className="text-sm">
-                <strong>{`${rev.name} `}</strong>
-                {`reviewed on ${moment(rev.date).format("Do MMMM YYYY")}`}
-                {index + 1}
-              </h3>
-              <p className="text-sm">{rev.review}</p>
+          {flower.reviews.map((rev, index) => {
+            return (
+              <div className="mb-3">
+                <h3 className="text-sm">
+                  <strong>{`${rev.name} `}</strong>
+                  {`reviewed on ${moment(rev.date).format("Do MMMM YYYY")}`}
+                  {index + 1}
+                </h3>
+                <p className="text-sm">{rev.review}</p>
 
-              {isAuthenticated && rev.user_id === userId && (
-                <div className="h-4">
-                  <button className="bg-teal px-2 text-xs h-full mr-1 rounded-xl font-bold">
-                    <Link to={"/flowers/" + id + "/review"}>Edit</Link>
-                  </button>
+                {isAuthenticated && rev.user_id === userId && (
+                  <div className="h-4">
+                    <button className="bg-teal px-2 text-xs h-full mr-1 rounded-xl font-bold">
+                      <Link to={"/flowers/" + id + "/review"}>Edit</Link>
+                    </button>
 
-                  <button
-                    className="bg-teal px-2 text-xs h-full mr-2 rounded-xl font-bold"
-                    onClick={() => {
-                      if (rev.user_id === userId) {
-                        deleteReview(rev._id, index);
-                      } else {
-                        console.log("failed");
-                        alert(
-                          "Sorry, you can only edit or delete your own reviews"
-                        );
-                      }
-                    }}
-                  >
-                    Delete
-                  </button>
-                </div>
-              )}
-            </div>
-          );
-        })}
-        {!isAuthenticated && <div>Log in to edit and delete reviews</div>}
+                    <button
+                      className="bg-teal px-2 text-xs h-full mr-2 rounded-xl font-bold"
+                      onClick={() => {
+                        if (rev.user_id === userId) {
+                          deleteReview(rev._id, index);
+                        } else {
+                          console.log("failed");
+                          alert(
+                            "Sorry, you can only edit or delete your own reviews"
+                          );
+                        }
+                      }}
+                    >
+                      Delete
+                    </button>
+                  </div>
+                )}
+              </div>
+            );
+          })}
+          {!isAuthenticated && (
+            <div>Please log in to edit and delete reviews</div>
+          )}
+        </div>
       </div>
     </div>
   );

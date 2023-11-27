@@ -3,7 +3,7 @@ import FlowerDataService from "../services/flowers";
 import { Link } from "react-router-dom";
 import Button from "./button";
 
-const FlowersList = (props) => {
+const FlowersList = () => {
   const [flowers, setFlowers] = useState([]);
   const [searchTitle, setSearchTitle] = useState("");
   const [searchRating, setSearchRating] = useState("");
@@ -24,7 +24,8 @@ const FlowersList = (props) => {
   const retrieveFlowers = () => {
     FlowerDataService.getAll()
       .then((response) => {
-        setFlowers(response.data.flowers);
+        const newFlowers = response.data.flowers;
+        setFlowers(newFlowers);
       })
       .catch((e) => {
         console.log(e);
@@ -34,38 +35,30 @@ const FlowersList = (props) => {
   const retrieveRatings = () => {
     FlowerDataService.getRatings()
       .then((response) => {
-        setRatings(["All Ratings"].concat(response.data));
+        const newRatings = ["All Ratings"].concat(response.data);
+        setRatings(newRatings);
       })
       .catch((e) => {
         console.log(e);
       });
-  };
-
-  const onChangeSearchTitle = (e) => {
-    const searchTitle = e.target.value;
-    setSearchTitle(searchTitle);
-  };
-
-  const onChangeSearchRating = (e) => {
-    const searchRating = e.target.value;
-    setSearchRating(searchRating);
   };
 
   const find = (query, by) => {
     FlowerDataService.find(query, by)
       .then((response) => {
-        setFlowers(response.data.flowers);
+        const newFlowers = response.data.flowers;
+        setFlowers(newFlowers);
       })
       .catch((e) => {
         console.log(e);
       });
   };
 
-  const findByTitle = () => {
+  const findByTitle = (searchTitle) => {
     find(searchTitle, "title");
   };
 
-  const findByRating = () => {
+  const findByRating = (searchRating) => {
     if (searchRating === "All Ratings") {
       retrieveFlowers();
     } else {
@@ -74,37 +67,33 @@ const FlowersList = (props) => {
   };
 
   return (
-    <div>
-      <form class="w-full flex wrap m-3 mt-0">
-        <div class="w-1/2 flex items-center">
-          <input
-            class="rounded-xl px-2 h-6 w-8/12 mr-2"
-            type="text"
-            value={searchTitle}
-            onChange={onChangeSearchTitle}
-            placeholder="Search by Name"
-          />
-          <div class="w-3/12">
-            <Button btnText={"Go"} btnAction={findByTitle} />
-          </div>
-        </div>
+    <div className="max-w-[1200px] mx-auto">
+      <form class="flex wrap ml-auto mr-5 h-10 my-5 w-2/5">
+        <input
+          class="rounded-full px-5 mr-2 w-full bg-gray-100 drop-shadow-md text-right border-slate-200 border-2 outline-none"
+          type="text"
+          value={searchTitle}
+          onChange={(e) => {
+            setSearchTitle(e.target.value);
+            findByTitle(e.target.value);
+          }}
+          placeholder="Search by Title"
+        />
 
-        <div class="w-1/2 flex items-center">
-          <select
-            class="rounded-xl px-2 h-6 w-8/12 mr-2"
-            type="select"
-            value={searchRating}
-            onChange={onChangeSearchRating}
-            placeholder="Search by Rating"
-          >
-            {ratings.map((rating) => {
-              return <option value={rating}>{rating}</option>;
-            })}
-          </select>
-          <div class="w-3/12">
-            <Button btnText={"Go"} btnAction={findByRating} />
-          </div>
-        </div>
+        <select
+          class="rounded-full px-2 ml-auto w-auto text-center bg-gray-100 drop-shadow-md border-slate-200 border-2 outline-none"
+          type="select"
+          value={searchRating}
+          onChange={(e) => {
+            setSearchRating(e.target.value);
+            findByRating(e.target.value);
+          }}
+          placeholder="Search by Rating"
+        >
+          {ratings.map((rating) => {
+            return <option value={rating}>{rating}</option>;
+          })}
+        </select>
       </form>
 
       <div className="flex flex-wrap max-w-7xl mx-auto">
@@ -117,9 +106,9 @@ const FlowersList = (props) => {
             posterSrc = flower.poster + "/100px180";
           }
           return (
-            <div className="mx-auto max-w-[400px] sm:w-1/3 px-2 text-center justify-center mb-0 font-bold">
+            <div className="mx-auto max-w-[400px] sm:w-[32%] text-center justify-center p-5 mb-5 font-bold bg-white rounded-lg shadow-md">
               <Link to={"/flowers/" + flower._id}>
-                <div className="bg-white">
+                <div>
                   <img
                     className=" w-full aspect-[2/3] object-cover mb-2 hover:opacity-80 transition-all"
                     alt=""

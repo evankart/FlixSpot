@@ -19,10 +19,10 @@ function App() {
   }
 
   return (
-    <div className="bg-panda h-screen overflow-x-hidden">
+    <div className="bg-f8 h-screen overflow-x-hidden font-poppins">
       <Navbar profilePicture={profilePicture} />
 
-      <div className="bg-panda rounded-lg  mx-auto py-1">
+      <div className="rounded-lg  mx-auto py-1">
         <Routes>
           {/* <Route path={"/flowers"} element={<FlowersList />} /> */}
           <Route path={"/"} element={<FlowersList />} />
