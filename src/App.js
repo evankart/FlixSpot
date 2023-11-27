@@ -9,7 +9,6 @@ import Navbar from "./components/navbar";
 import { useAuth0 } from "@auth0/auth0-react";
 import Profile from "./components/profile";
 import Settings from "./components/settings";
-// import MUIButton from "@mui/material/Button";
 
 function App() {
   const { user } = useAuth0();
@@ -22,11 +21,10 @@ function App() {
   return (
     <div className="bg-panda h-screen overflow-x-hidden">
       <Navbar profilePicture={profilePicture} />
-      {/* <MUIButton>Test Material UI</MUIButton> */}
 
       <div className="bg-panda rounded-lg  mx-auto py-1">
         <Routes>
-          <Route path={"/flowers"} element={<FlowersList />} />
+          {/* <Route path={"/flowers"} element={<FlowersList />} /> */}
           <Route path={"/"} element={<FlowersList />} />
           <Route path={"/profile"} element={<Profile />} />
           <Route path={"/settings"} element={<Settings />} />

@@ -91,19 +91,15 @@ export default function Navbar(props) {
                   >
                     Home
                   </Link>
-                  <Link
-                    to={"/flowers"}
-                    className="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium"
-                  >
-                    Flowers
-                  </Link>
 
-                  <Link
-                    to={"/map"}
-                    className="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium"
-                  >
-                    Map
-                  </Link>
+                  {user ? (
+                    <Link
+                      to={"/profile"}
+                      className="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium"
+                    >
+                      Profile
+                    </Link>
+                  ) : null}
                 </div>
               </div>
               {user ? (
