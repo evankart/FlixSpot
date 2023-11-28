@@ -1,5 +1,5 @@
 import { useState } from "react";
-import FlowerDataService from "../services/flowers";
+import MovieDataService from "../services/movies";
 import { Link, useParams } from "react-router-dom";
 
 const AddReview = (props) => {
@@ -27,11 +27,11 @@ const AddReview = (props) => {
       review: review,
       name: props.user.name,
       user_id: props.user.sub,
-      flower_id: id,
+      movie_id: id,
     };
 
     if (editing) {
-      FlowerDataService.updateReview(data)
+      MovieDataService.updateReview(data)
         .then((response) => {
           setSubmitted(true);
           console.log(response.data);
@@ -40,7 +40,7 @@ const AddReview = (props) => {
           console.log(e);
         });
     } else {
-      FlowerDataService.createReview(data)
+      MovieDataService.createReview(data)
         .then((response) => {
           setSubmitted(true);
           console.log(response.data);
@@ -60,12 +60,12 @@ const AddReview = (props) => {
         <div>
           <h4>Review submitted successfully</h4>
           <Link
-            to={"/flowers/" + id}
+            to={"/movies/" + id}
             onClick={() => {
               setSubmitted(false);
             }}
           >
-            Back to Flower
+            Back to movie
           </Link>
         </div>
       ) : (

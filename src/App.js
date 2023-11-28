@@ -1,9 +1,9 @@
 import "./App.css";
 import { Routes, Route, Link } from "react-router-dom";
 import AddReview from "./components/add-review";
-import FlowersList from "./components/flowers-list";
+import MoviesList from "./components/movies-list";
 import Map from "./components/map";
-import Flower from "./components/flower";
+import Movie from "./components/movie";
 import Login from "./components/login";
 import Navbar from "./components/navbar";
 import { useAuth0 } from "@auth0/auth0-react";
@@ -24,17 +24,17 @@ function App() {
 
       <div className="rounded-lg  mx-auto py-1">
         <Routes>
-          {/* <Route path={"/flowers"} element={<FlowersList />} /> */}
-          <Route path={"/"} element={<FlowersList />} />
+          {/* <Route path={"/movies"} element={<MoviesList />} /> */}
+          <Route path={"/"} element={<MoviesList />} />
           <Route path={"/profile"} element={<Profile />} />
           <Route path={"/settings"} element={<Settings />} />
 
           <Route
-            path={"/flowers/:id/review"}
+            path={"/movies/:id/review"}
             element={<AddReview user={user} />}
           />
 
-          <Route path={"/flowers/:id/"} element={<Flower user={user} />} />
+          <Route path={"/movies/:id/"} element={<Movie user={user} />} />
 
           <Route path={"/login"} element={<Login />} />
 

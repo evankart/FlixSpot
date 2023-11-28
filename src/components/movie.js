@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
-import FlowerDataService from "../services/flowers";
+import MovieDataService from "../services/movies";
 import { Link, useParams } from "react-router-dom";
 import moment from "moment";
 import { useAuth0 } from "@auth0/auth0-react";
 import AddReview from "./add-review";
 
-const Flower = (props) => {
+const Movie = (props) => {
   let userId;
 
   props.user ? (userId = props.user.sub) : (userId = "");
@@ -13,17 +13,17 @@ const Flower = (props) => {
   let { id } = useParams();
   const { isAuthenticated, loginWithRedirect } = useAuth0();
 
-  const [flower, setFlower] = useState({
+  const [movie, setMovie] = useState({
     id: id,
     title: "",
     rated: "",
     reviews: [],
   });
 
-  const getFlower = (id) => {
-    FlowerDataService.get(id)
+  const getMovie = (id) => {
+    MovieDataService.get(id)
       .then((response) => {
-        setFlower(response.data);
+        setMovie(response.data);
       })
       .catch((e) => {
         console.log(e);
@@ -31,15 +31,15 @@ const Flower = (props) => {
   };
 
   useEffect(() => {
-    getFlower(id);
+    getMovie(id);
   }, [id]);
 
   const deleteReview = (reviewId, index) => {
-    FlowerDataService.deleteReview(reviewId, userId)
+    MovieDataService.deleteReview(reviewId, userId)
       .then(() => {
-        setFlower(() => {
-          flower.reviews.splice(index, 1);
-          return { ...flower };
+        setMovie(() => {
+          movie.reviews.splice(index, 1);
+          return { ...movie };
         });
       })
       .catch((e) => {
@@ -50,29 +50,29 @@ const Flower = (props) => {
   return (
     <div className="my-5">
       <h1 className="text-center font-poppins font-bold text-2xl mb-3">
-        {flower.title}
+        {movie.title}
       </h1>
 
       <div className="flex flex-col sm:flex-row sm:w-3/4 sm:max-w-[1000px] mx-auto">
         <img
           className="w-[400px] mx-auto "
-          src={flower.poster + "/100px180"}
+          src={movie.poster + "/100px180"}
           alt=""
         />
 
         <div className="mx-auto p-5">
-          <p className="mb-3">{flower.plot}</p>
+          <p className="mb-3">{movie.plot}</p>
           {isAuthenticated && (
             <>
               {/* <button className="bg-teal px-2 rounded-xl h-6 font-bold text-sm mb-4">
-              <Link to={"/flowers/" + id + "/review"}>Add a Review</Link>
+              <Link to={"/movies/" + id + "/review"}>Add a Review</Link>
             </button> */}
 
               <button
                 onClick={() => {
                   let wrapper = document.querySelector("#addReviewWrapper");
                   wrapper.classList.toggle("hidden");
-                  setFlower(flower);
+                  setMovie(movie);
                 }}
                 className="bg-teal px-2 rounded-xl h-6 font-bold text-sm mb-4"
               >
@@ -85,7 +85,7 @@ const Flower = (props) => {
           )}
           <h1 className="font-bold my-2">Reviews:</h1>
 
-          {flower.reviews.map((rev, index) => {
+          {movie.reviews.map((rev, index) => {
             return (
               <div className="mb-3">
                 <h3 className="text-sm">
@@ -98,7 +98,7 @@ const Flower = (props) => {
                 {isAuthenticated && rev.user_id === userId && (
                   <div className="h-4">
                     <button className="bg-teal px-2 text-xs h-full mr-1 rounded-xl font-bold">
-                      <Link to={"/flowers/" + id + "/review"}>Edit</Link>
+                      <Link to={"/movies/" + id + "/review"}>Edit</Link>
                     </button>
 
                     <button
@@ -130,4 +130,4 @@ const Flower = (props) => {
   );
 };
 
-export default Flower;
+export default Movie;
