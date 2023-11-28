@@ -1,5 +1,5 @@
 import "./App.css";
-import { Routes, Route, Link } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import AddReview from "./components/add-review";
 import MoviesList from "./components/movies-list";
 import Map from "./components/map";
