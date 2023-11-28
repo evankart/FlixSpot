@@ -92,14 +92,15 @@ export default function Navbar(props) {
                     Home
                   </Link>
 
-                  {user ? (
+                  {/* Show Profile link in navbar when user is logged in */}
+                  {/* {user ? (
                     <Link
                       to={"/profile"}
                       className="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium"
                     >
                       Profile
                     </Link>
-                  ) : null}
+                  ) : null} */}
                 </div>
               </div>
               {user ? (
@@ -158,7 +159,7 @@ export default function Navbar(props) {
                   tabindex="-1"
                 >
                   {/* <!-- Active: "bg-gray-100", Not Active: "" --> */}
-                  <a
+                  {/* <a
                     href="/profile"
                     class="block px-4 py-2 text-sm text-gray-700"
                     role="menuitem"
@@ -175,7 +176,7 @@ export default function Navbar(props) {
                     id="user-menu-item-1"
                   >
                     Settings
-                  </a>
+                  </a> */}
 
                   {user ? (
                     <button
