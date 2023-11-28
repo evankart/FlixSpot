@@ -2,12 +2,6 @@ import { useState } from "react";
 import MovieDataService from "../services/movies";
 import { Link, useParams } from "react-router-dom";
 
-const Test = () => {
-  console.log("Testing");
-};
-
-Test();
-
 const AddReview = (props) => {
   let { id } = useParams();
 
