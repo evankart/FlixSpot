@@ -17,8 +17,9 @@ const AddReview = (props) => {
   const [submitted, setSubmitted] = useState(false);
 
   const onChangeReview = (e) => {
-    const review = e.target.value;
-    setReview(review);
+    const newReview = e.target.value;
+    setReview(newReview);
+    console.log(newReview);
   };
 
   let data;
@@ -33,7 +34,8 @@ const AddReview = (props) => {
     if (editing) {
       MovieDataService.updateReview(data)
         .then((response) => {
-          setSubmitted(true);
+          const val = true;
+          setSubmitted(val);
           console.log(response.data);
         })
         .catch((e) => {
@@ -42,7 +44,8 @@ const AddReview = (props) => {
     } else {
       MovieDataService.createReview(data)
         .then((response) => {
-          setSubmitted(true);
+          const val = true;
+          setSubmitted(val);
           console.log(response.data);
         })
         .catch((e) => {
@@ -51,7 +54,8 @@ const AddReview = (props) => {
     }
 
     let wrapper = document.querySelector("#addReviewWrapper");
-    wrapper.classList.toggle("hidden");
+    // wrapper.classList.toggle("hidden");
+    setReview("");
   };
 
   return (
@@ -62,24 +66,34 @@ const AddReview = (props) => {
           <Link
             to={"/movies/" + id}
             onClick={() => {
-              setSubmitted(false);
+              const val = false;
+              setSubmitted(val);
             }}
           >
             Back to movie
           </Link>
         </div>
       ) : (
-        <div>
+        <form>
           <textarea
             value={review}
             className="w-full"
             onChange={onChangeReview}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                saveReview();
+              }
+            }}
           />
 
-          <button className="flex ml-auto font-bold" onClick={saveReview}>
+          <button
+            className="flex ml-auto font-bold"
+            onClick={saveReview}
+            type="submit"
+          >
             Submit
           </button>
-        </div>
+        </form>
       )}
     </div>
   );

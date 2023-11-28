@@ -48,33 +48,29 @@ const Movie = (props) => {
   };
 
   return (
-    <div className="my-5">
-      <h1 className="text-center font-poppins font-bold text-2xl mb-3">
+    <div className="my-5 sm:w-7/8 lg:w-3/5 mx-auto h-[80vh]">
+      <h1 className="text-center font-poppins font-bold text-xl sm:text-2xl mb-3">
         {movie.title}
       </h1>
 
-      <div className="flex flex-col sm:flex-row sm:w-3/4 sm:max-w-[1000px] mx-auto">
+      <div className="flex flex-col sm:flex-row ">
         <img
-          className="w-[400px] mx-auto "
+          className="w-[70%] w-max-[400px] mx-auto sm:w-2/5"
           src={movie.poster + "/100px180"}
           alt=""
         />
 
-        <div className="mx-auto p-5">
+        <div className="w-full mx-auto p-5 sm:w-3/5">
           <p className="mb-3">{movie.plot}</p>
           {isAuthenticated && (
             <>
-              {/* <button className="bg-teal px-2 rounded-xl h-6 font-bold text-sm mb-4">
-              <Link to={"/movies/" + id + "/review"}>Add a Review</Link>
-            </button> */}
-
               <button
                 onClick={() => {
                   let wrapper = document.querySelector("#addReviewWrapper");
                   wrapper.classList.toggle("hidden");
                   setMovie(movie);
                 }}
-                className="bg-teal px-2 rounded-xl h-6 font-bold text-sm mb-4"
+                className="bg-teal px-2 rounded-full h-8 font-bold text-sm mb-4"
               >
                 Add a Review
               </button>

@@ -8,7 +8,6 @@ const base = "https://flixspot-backend.vercel.app/api/v1/movies";
 class MovieDataService {
   getAll(page = 0) {
     return axios.get(`${base}?page=${page}`);
-    // return axios.get(`https://flowermap-backend.onrender.com?page=${page}`);
   }
   get(id) {
     return axios.get(`${base}/id/${id}`);
