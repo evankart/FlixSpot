@@ -31,27 +31,27 @@ const AddReview = (props) => {
       movie_id: id,
     };
 
-    if (editing) {
-      MovieDataService.updateReview(data)
-        .then((response) => {
-          const val = true;
-          setSubmitted(val);
-          console.log(response.data);
-        })
-        .catch((e) => {
-          console.log(e);
-        });
-    } else {
-      MovieDataService.createReview(data)
-        .then((response) => {
-          const val = true;
-          setSubmitted(val);
-          console.log(response.data);
-        })
-        .catch((e) => {
-          console.log(e);
-        });
-    }
+    // if (editing) {
+    //   MovieDataService.updateReview(data)
+    //     .then((response) => {
+    //       const val = true;
+    //       setSubmitted(val);
+    //       console.log(response.data);
+    //     })
+    //     .catch((e) => {
+    //       console.log(e);
+    //     });
+    // } else {
+    MovieDataService.createReview(data)
+      .then((response) => {
+        const val = true;
+        setSubmitted(val);
+        console.log(response.data);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+    // }
 
     let wrapper = document.querySelector("#addReviewWrapper");
     // wrapper.classList.toggle("hidden");
