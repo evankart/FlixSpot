@@ -17,6 +17,7 @@ class MovieDataService {
     return axios.get(`${base}?${by}=${query}&page=${page}`);
   }
   createReview(data) {
+    console.log("Received POST request with data:", data);
     return axios.post(`${base}/review`, data);
   }
   updateReview(data) {

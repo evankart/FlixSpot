@@ -11,7 +11,7 @@ const Movie = (props) => {
   props.user ? (userId = props.user.sub) : (userId = "");
 
   let { id } = useParams();
-  const { isAuthenticated, loginWithRedirect } = useAuth0();
+  const { isAuthenticated } = useAuth0();
 
   const [movie, setMovie] = useState({
     id: id,
@@ -37,10 +37,18 @@ const Movie = (props) => {
   const deleteReview = (reviewId, index) => {
     MovieDataService.deleteReview(reviewId, userId)
       .then(() => {
-        setMovie(() => {
-          movie.reviews.splice(index, 1);
-          return { ...movie };
+        const newArray = [
+          ...movie.reviews.slice(0, index),
+          ...movie.reviews.slice(index + 1),
+        ];
+        console.log("movie.reviews: ", movie.reviews);
+        setMovie({
+          id: movie.id,
+          title: movie.title,
+          rated: movie.rated,
+          reviews: newArray,
         });
+        console.log("movie.reviews: ", movie.reviews);
       })
       .catch((e) => {
         console.log(e);
