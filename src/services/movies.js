@@ -11,7 +11,7 @@ class MovieDataService {
     return axios.get(`${base}?page=${page}`);
   }
   get(id) {
-    return axios.get(`${base}/id/${id}`);
+    return axios.get(`${base}/${id}`);
   }
   find(query, by = "title", page = 0) {
     return axios.get(`${base}?${by}=${query}&page=${page}`);

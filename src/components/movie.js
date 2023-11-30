@@ -49,6 +49,7 @@ const Movie = (props) => {
           reviews: newArray,
         });
         console.log("movie.reviews: ", movie.reviews);
+        console.log("movie poster: ", movie.poster);
       })
       .catch((e) => {
         console.log(e);
