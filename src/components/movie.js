@@ -32,7 +32,7 @@ const Movie = (props) => {
 
   useEffect(() => {
     getMovie(id);
-  }, [id]);
+  }, [id, movie]);
 
   const deleteReview = (reviewId, index) => {
     MovieDataService.deleteReview(reviewId, userId)
@@ -41,13 +41,11 @@ const Movie = (props) => {
           ...movie.reviews.slice(0, index),
           ...movie.reviews.slice(index + 1),
         ];
+
+        const newMovie = movie;
+        newMovie.reviews = newArray;
         console.log("movie.reviews: ", movie.reviews);
-        setMovie({
-          id: movie.id,
-          title: movie.title,
-          rated: movie.rated,
-          reviews: newArray,
-        });
+        setMovie(newMovie);
         console.log("movie.reviews: ", movie.reviews);
         console.log("movie poster: ", movie.poster);
       })
@@ -73,17 +71,10 @@ const Movie = (props) => {
           <p className="mb-3">{movie.plot}</p>
           {isAuthenticated && (
             <>
-              <button
-                onClick={() => {
-                  let wrapper = document.querySelector("#addReviewWrapper");
-                  wrapper.classList.toggle("hidden");
-                  setMovie(movie);
-                }}
-                className="bg-teal px-2 rounded-full h-8 font-bold text-sm mb-4"
+              <div
+                id="addReviewWrapper"
+                // className="hidden"
               >
-                Add a Review
-              </button>
-              <div id="addReviewWrapper" className="hidden">
                 <AddReview user={props.user} />
               </div>
             </>
@@ -96,14 +87,13 @@ const Movie = (props) => {
                 <h3 className="text-sm">
                   <strong>{`${rev.name} `}</strong>
                   {`reviewed on ${moment(rev.date).format("Do MMMM YYYY")}`}
-                  {index + 1}
                 </h3>
                 <p className="text-sm">{rev.review}</p>
 
                 {isAuthenticated && rev.user_id === userId && (
                   <div className="h-4">
                     <button className="bg-teal px-2 text-xs h-full mr-1 rounded-xl font-bold">
-                      <Link to={"/movies/" + id + "/review"}>Edit</Link>
+                      <Link to={`/movies/${id}/review`}>Edit</Link>
                     </button>
 
                     <button

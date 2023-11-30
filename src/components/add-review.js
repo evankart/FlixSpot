@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import MovieDataService from "../services/movies";
 import { Link, useParams } from "react-router-dom";
 
@@ -24,6 +24,10 @@ const AddReview = (props) => {
 
   let data;
   const saveReview = () => {
+    console.log("start saveReview");
+    console.log(`submitted?: ${submitted}`);
+    console.log(`review: ${review}`);
+
     data = {
       review: review,
       name: props.user.name,
@@ -53,50 +57,91 @@ const AddReview = (props) => {
       });
     // }
 
-    let wrapper = document.querySelector("#addReviewWrapper");
-    // wrapper.classList.toggle("hidden");
     setReview("");
+    setSubmitted(true);
   };
+
+  useEffect(() => {
+    console.log(`submitted?: ${submitted}`);
+  }, [submitted]);
 
   return (
     <div>
       {submitted ? (
         <div>
-          <h4>Review submitted successfully</h4>
-          <Link
-            to={"/movies/" + id}
-            onClick={() => {
-              const val = false;
-              setSubmitted(val);
-            }}
-          >
-            Back to movie
-          </Link>
+          <h4>Review submitted successfully!</h4>
         </div>
       ) : (
-        <form>
-          <textarea
-            value={review}
-            className="w-full"
-            onChange={onChangeReview}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") {
-                saveReview();
-              }
-            }}
-          />
+        <>
+          {" "}
+          {/*
+           * on first load show add review box
+           * on clicking Submit, add review to list hide the text box and submit button, show success message
+           */}
+          <form>
+            <textarea
+              value={review}
+              placeholder="Add a review"
+              className="w-full"
+              onChange={onChangeReview}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  saveReview();
+                }
+              }}
+            />
 
-          <button
-            className="flex ml-auto font-bold"
-            onClick={saveReview}
-            type="submit"
-          >
-            Submit
-          </button>
-        </form>
+            <button
+              className="flex ml-auto font-bold"
+              onClick={saveReview}
+              type="submit"
+            >
+              Submit
+            </button>
+          </form>
+        </>
       )}
     </div>
   );
 };
+//     <div>
+//       {submitted ? (
+//         <div>
+//           <h4>Review submitted successfully</h4>
+//           <Link
+//             to={"/movies/" + id}
+//             onClick={() => {
+//               const val = false;
+//               setSubmitted(val);
+//             }}
+//           >
+//             Back to movie
+//           </Link>
+//         </div>
+//       ) : (
+//         <form>
+//           <textarea
+//             value={review}
+//             className="w-full"
+//             onChange={onChangeReview}
+//             onKeyDown={(e) => {
+//               if (e.key === "Enter") {
+//                 saveReview();
+//               }
+//             }}
+//           />
+
+//           <button
+//             className="flex ml-auto font-bold"
+//             onClick={saveReview}
+//             type="submit"
+//           >
+//             Submit
+//           </button>
+//         </form>
+//       )}
+//     </div>
+//   );
+// };
 
 export default AddReview;
