@@ -1,12 +1,13 @@
 import { useState, useEffect } from "react";
 import MovieDataService from "../services/movies";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import moment from "moment";
 import { useAuth0 } from "@auth0/auth0-react";
 import AddReview from "./add-review";
 
 const Movie = (props) => {
   let userId;
+  const [editing, setEditing] = useState("false");
 
   props.user ? (userId = props.user.sub) : (userId = "");
 
@@ -32,13 +33,33 @@ const Movie = (props) => {
 
   useEffect(() => {
     getMovie(id);
-  }, [id, movie]);
+  }, [id]);
 
   const deleteReview = (reviewId, index) => {
     MovieDataService.deleteReview(reviewId, userId)
       .then(() => {
         const newArray = [
           ...movie.reviews.slice(0, index),
+          ...movie.reviews.slice(index + 1),
+        ];
+
+        const newMovie = movie;
+        newMovie.reviews = newArray;
+        console.log(index);
+        console.log("movie.reviews: ", movie.reviews[index]);
+        setMovie(newMovie);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
+
+  const updateReview = (reviewId, index, newReview) => {
+    MovieDataService.updateReview(reviewId, userId, "test review content")
+      .then(() => {
+        const newArray = [
+          ...movie.reviews.slice(0, index),
+          newReview,
           ...movie.reviews.slice(index + 1),
         ];
 
@@ -75,7 +96,11 @@ const Movie = (props) => {
                 id="addReviewWrapper"
                 // className="hidden"
               >
-                <AddReview user={props.user} />
+                <AddReview
+                  editing={editing}
+                  setEditing={setEditing}
+                  user={props.user}
+                />
               </div>
             </>
           )}
@@ -92,8 +117,24 @@ const Movie = (props) => {
 
                 {isAuthenticated && rev.user_id === userId && (
                   <div className="h-4">
-                    <button className="bg-teal px-2 text-xs h-full mr-1 rounded-xl font-bold">
-                      <Link to={`/movies/${id}/review`}>Edit</Link>
+                    <button
+                      className="bg-teal px-2 text-xs h-full mr-2 rounded-xl font-bold"
+                      onClick={() => {
+                        if (rev.user_id === userId) {
+                          updateReview(
+                            rev._id,
+                            rev.user_id,
+                            "test review text"
+                          );
+                        } else {
+                          console.log("failed");
+                          alert(
+                            "Sorry, you can only edit or delete your own reviews"
+                          );
+                        }
+                      }}
+                    >
+                      Edit
                     </button>
 
                     <button

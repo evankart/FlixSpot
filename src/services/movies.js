@@ -1,7 +1,7 @@
 import axios from "axios";
 
-const base = "https://flixspot-backend.vercel.app/api/v1/movies";
-// const base = "http://localhost:5000/api/v1/movies";
+// const base = "https://flixspot-backend.vercel.app/api/v1/movies";
+const base = "http://localhost:5000/api/v1/movies";
 
 class MovieDataService {
   getAll(page = 0) {
@@ -14,15 +14,30 @@ class MovieDataService {
     return axios.get(`${base}?${by}=${query}&page=${page}`);
   }
   createReview(data) {
-    console.log("Received POST request with data:", data);
+    console.log(`CREATE REVIEW POST SERVICE`);
+    console.log(`(POST) data: `, data);
     return axios.post(`${base}/review`, data);
   }
-  updateReview(data) {
-    return axios.put(`${base}/review`, data);
+  updateReview(review_id, user_id, review) {
+    console.log(`UPDATE REVIEW PUT SERVICE`);
+    console.log(`(PUT) review_id: ${review_id}`);
+    console.log(`(PUT) userId: ${user_id}`);
+    console.log(`(PUT) review: ${review}`);
+
+    return axios.put(`${base}/review`, {
+      data: { review_id: review_id, user_id: user_id, review: review },
+      headers: {
+        "content-type": "application/json ",
+      },
+    });
   }
-  deleteReview(id, userId) {
+  deleteReview(review_id, user_id) {
+    console.log(`DELETE REVIEW DELETE SERVICE`);
+    console.log(`(DELETE) review_id: ${review_id}`);
+    console.log(`(DELETE) userId: ${user_id}`);
+
     return axios.delete(`${base}/review`, {
-      data: { review_id: id, user_id: userId },
+      data: { review_id: review_id, user_id: user_id },
     });
   }
   getRatings() {

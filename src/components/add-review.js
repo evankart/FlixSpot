@@ -1,11 +1,12 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import MovieDataService from "../services/movies";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 const AddReview = (props) => {
+  // console.log(`props: `, props);
+
   let { id } = useParams();
 
-  let editing = false;
   let initialReviewState = "";
 
   // if (props.location.state && props.location.state.currentReview) {
@@ -24,10 +25,6 @@ const AddReview = (props) => {
 
   let data;
   const saveReview = () => {
-    console.log("start saveReview");
-    console.log(`submitted?: ${submitted}`);
-    console.log(`review: ${review}`);
-
     data = {
       review: review,
       name: props.user.name,
@@ -35,8 +32,12 @@ const AddReview = (props) => {
       movie_id: id,
     };
 
-    // if (editing) {
-    //   MovieDataService.updateReview(data)
+    // console.log(`data: `, data);
+
+    // console.log(`props.editing: ${props.editing}`);
+    // if (props.editing === false) {
+    //   console.log("failed");
+    //   MovieDataService.createReview(data)
     //     .then((response) => {
     //       const val = true;
     //       setSubmitted(val);
@@ -46,24 +47,49 @@ const AddReview = (props) => {
     //       console.log(e);
     //     });
     // } else {
-    MovieDataService.createReview(data)
+    //   console.log("succeeded");
+    //   console.log(`props.editing: ${props.editing}`);
+    //   // MovieDataService.updateReview(rev._id, index);
+    //   console.log(`editing data: `, data);
+    //   MovieDataService.updateReview(data)
+    //     .then((response) => {
+    //       setSubmitted(true);
+    //       console.log(response.data);
+    //     })
+    //     .catch((e) => {
+    //       console.log(e);
+    //     });
+    //   props.setEditing(false);
+    // }
+
+    // MovieDataService.createReview(data)
+    //   .then((response) => {
+    //     const val = true;
+    //     setSubmitted(val);
+    //     console.log(response.data);
+    //   })
+    //   .catch((e) => {
+    //     console.log(e);
+    //   });
+
+    // MovieDataService.updateReview(rev._id, index);
+    // console.log(`editing data: `, data);
+    MovieDataService.updateReview(
+      "6568f326373f0e803811e0a1",
+      "auth0|6568e3c8cc59856df9af6a0e",
+      "test text"
+    )
       .then((response) => {
-        const val = true;
-        setSubmitted(val);
-        console.log(response.data);
+        setSubmitted(true);
       })
       .catch((e) => {
         console.log(e);
       });
-    // }
+    props.setEditing(false);
 
     setReview("");
     setSubmitted(true);
   };
-
-  useEffect(() => {
-    console.log(`submitted?: ${submitted}`);
-  }, [submitted]);
 
   return (
     <div>
@@ -73,7 +99,6 @@ const AddReview = (props) => {
         </div>
       ) : (
         <>
-          {" "}
           {/*
            * on first load show add review box
            * on clicking Submit, add review to list hide the text box and submit button, show success message
@@ -104,44 +129,5 @@ const AddReview = (props) => {
     </div>
   );
 };
-//     <div>
-//       {submitted ? (
-//         <div>
-//           <h4>Review submitted successfully</h4>
-//           <Link
-//             to={"/movies/" + id}
-//             onClick={() => {
-//               const val = false;
-//               setSubmitted(val);
-//             }}
-//           >
-//             Back to movie
-//           </Link>
-//         </div>
-//       ) : (
-//         <form>
-//           <textarea
-//             value={review}
-//             className="w-full"
-//             onChange={onChangeReview}
-//             onKeyDown={(e) => {
-//               if (e.key === "Enter") {
-//                 saveReview();
-//               }
-//             }}
-//           />
-
-//           <button
-//             className="flex ml-auto font-bold"
-//             onClick={saveReview}
-//             type="submit"
-//           >
-//             Submit
-//           </button>
-//         </form>
-//       )}
-//     </div>
-//   );
-// };
 
 export default AddReview;
