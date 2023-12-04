@@ -1,7 +1,7 @@
 import axios from "axios";
 
-const base = "https://flixspot-backend.vercel.app/api/v1/movies";
-// const base = "http://localhost:5000/api/v1/movies";
+// const base = "https://flixspot-backend.vercel.app/api/v1/movies";
+const base = "http://localhost:5000/api/v1/movies";
 
 class MovieDataService {
   getAll(page = 0) {
@@ -10,6 +10,11 @@ class MovieDataService {
   get(id) {
     return axios.get(`${base}/${id}`);
   }
+
+  get(review_id) {
+    return axios.get(`${base}/review/${review_id}`);
+  }
+
   find(query, by = "title", page = 0) {
     return axios.get(`${base}?${by}=${query}&page=${page}`);
   }
