@@ -1,6 +1,6 @@
 import "./App.css";
 import { Routes, Route } from "react-router-dom";
-import AddReview from "./components/add-review";
+import Review from "./components/review";
 import MoviesList from "./components/movies-list";
 import Map from "./components/map";
 import Movie from "./components/movie";
@@ -29,10 +29,7 @@ function App() {
           <Route path={"/profile"} element={<Profile />} />
           <Route path={"/settings"} element={<Settings />} />
 
-          <Route
-            path={"/movies/:id/review"}
-            element={<AddReview user={user} />}
-          />
+          <Route path={"/movies/:id/review"} element={<Review user={user} />} />
 
           <Route path={"/movies/:id/"} element={<Movie user={user} />} />
 
