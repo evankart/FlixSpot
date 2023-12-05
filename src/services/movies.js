@@ -11,9 +11,9 @@ class MovieDataService {
     return axios.get(`${base}/${id}`);
   }
 
-  get(review_id) {
-    return axios.get(`${base}/review/${review_id}`);
-  }
+  // get(review_id) {
+  //   return axios.get(`${base}/review/${review_id}`);
+  // }
 
   find(query, by = "title", page = 0) {
     return axios.get(`${base}?${by}=${query}&page=${page}`);
@@ -28,13 +28,38 @@ class MovieDataService {
     console.log(`(PUT) review_id: ${review_id}`);
     console.log(`(PUT) userId: ${user_id}`);
     console.log(`(PUT) review: ${review}`);
+    console.log(`(PUT) request URL: ${base}/${review_id}`);
 
-    return axios.put(`${base}/review`, {
-      data: { review_id: review_id, user_id: user_id, review: review },
-      headers: {
-        "content-type": "application/json ",
-      },
-    });
+    let data = {
+      review_id: review_id,
+      user_id: user_id,
+      review: review,
+    };
+
+    console.log("data: ", data);
+
+    return axios
+      .put(`${base}/${review_id}`, {
+        data: {
+          review_id: review_id,
+          user_id: user_id,
+          review: review,
+        },
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+      .then((response) => {
+        console.log("Success:", response.data);
+        // Log the response to the client console
+      })
+      .catch((error) => {
+        console.error(
+          "Error:",
+          error.response ? error.response.data : error.message
+        );
+        // Log the error to the client console
+      });
   }
   deleteReview(review_id, user_id) {
     console.log(`DELETE REVIEW DELETE SERVICE`);

@@ -8,6 +8,8 @@ import AddReview from "./add-review";
 const Movie = (props) => {
   let userId;
   props.user ? (userId = props.user.sub) : (userId = "");
+  let reviewContent = "";
+  const [review, setReview] = useState("");
 
   let { id } = useParams();
   const { isAuthenticated } = useAuth0();
@@ -18,6 +20,12 @@ const Movie = (props) => {
     rated: "",
     reviews: [],
   });
+
+  const [reviewId, setReviewId] = useState("");
+
+  useEffect(() => {
+    console.log("review: ", review);
+  }, [review]);
 
   const getMovie = (id) => {
     MovieDataService.get(id)
@@ -31,10 +39,10 @@ const Movie = (props) => {
 
   useEffect(() => {
     getMovie(id);
-  }, [id]);
+  }, [id, movie]);
 
   const deleteReview = (reviewId, index) => {
-    MovieDataService.deleteReview(reviewId, userId)
+    MovieDataService.deleteReview(reviewId, userId, id)
       .then(() => {
         const newArray = [
           ...movie.reviews.slice(0, index),
@@ -43,9 +51,9 @@ const Movie = (props) => {
 
         const newMovie = movie;
         newMovie.reviews = newArray;
-        console.log(index);
         console.log("movie.reviews: ", movie.reviews[index]);
         setMovie(newMovie);
+        console.log("newMovie", newMovie);
       })
       .catch((e) => {
         console.log(e);
@@ -53,7 +61,7 @@ const Movie = (props) => {
   };
 
   const updateReview = (reviewId, index, newReview) => {
-    MovieDataService.updateReview(reviewId, userId, "test review content")
+    MovieDataService.updateReview(reviewId, userId, newReview)
       .then(() => {
         const newArray = [
           ...movie.reviews.slice(0, index),
@@ -63,10 +71,7 @@ const Movie = (props) => {
 
         const newMovie = movie;
         newMovie.reviews = newArray;
-        console.log("movie.reviews: ", movie.reviews);
         setMovie(newMovie);
-        console.log("movie.reviews: ", movie.reviews);
-        console.log("movie poster: ", movie.poster);
       })
       .catch((e) => {
         console.log(e);
@@ -94,7 +99,14 @@ const Movie = (props) => {
                 id="addReviewWrapper"
                 // className="hidden"
               >
-                <AddReview user={props.user} />
+                <AddReview
+                  user={props.user}
+                  reviewId={reviewId}
+                  setReviewId={setReviewId}
+                  reviewContent={reviewContent}
+                  review={review}
+                  setReview={setReview}
+                />
               </div>
             </>
           )}
@@ -114,12 +126,10 @@ const Movie = (props) => {
                     <button
                       className="bg-teal px-2 text-xs h-full mr-2 rounded-xl font-bold"
                       onClick={() => {
+                        setReviewId(rev._id);
                         if (rev.user_id === userId) {
-                          updateReview(
-                            rev._id,
-                            rev.user_id,
-                            "test review text"
-                          );
+                          console.log("proceed");
+                          updateReview(rev._id, index, review);
                         } else {
                           console.log("failed");
                           alert(

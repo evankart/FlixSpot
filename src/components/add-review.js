@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import MovieDataService from "../services/movies";
 import { useParams } from "react-router-dom";
 
@@ -9,67 +9,28 @@ const AddReview = (props) => {
   const [editing, setEditing] = useState(false);
 
   let { id } = useParams();
-
-  let initialReviewState = "";
-
-  // if (props.location.state && props.location.state.currentReview) {
-  //   editing = true;
-  //   initialReviewState = props.location.state.currentReview.review;
-  // }
-
-  const [review, setReview] = useState(initialReviewState);
   const [submitted, setSubmitted] = useState(false);
 
   const onChangeReview = (e) => {
     const newReview = e.target.value;
-    setReview(newReview);
+    props.setReview(newReview);
     console.log(newReview);
   };
 
   let data;
   const saveReview = () => {
     data = {
-      review: review,
+      review: props.review,
+      review_id: props.review_id,
       name: props.user.name,
       user_id: props.user.sub,
       movie_id: id,
     };
 
-    // console.log(`data: `, data);
-
-    // console.log(`props.editing: ${props.editing}`);
-    // if (props.editing === false) {
-    //   console.log("failed");
-    //   MovieDataService.createReview(data)
-    //     .then((response) => {
-    //       const val = true;
-    //       setSubmitted(val);
-    //       console.log(response.data);
-    //     })
-    //     .catch((e) => {
-    //       console.log(e);
-    //     });
-    // } else {
-    //   console.log("succeeded");
-    //   console.log(`props.editing: ${props.editing}`);
-    //   // MovieDataService.updateReview(rev._id, index);
-    //   console.log(`editing data: `, data);
-    //   MovieDataService.updateReview(data)
-    //     .then((response) => {
-    //       setSubmitted(true);
-    //       console.log(response.data);
-    //     })
-    //     .catch((e) => {
-    //       console.log(e);
-    //     });
-    //   props.setEditing(false);
-    // }
-
-    // setReview("");
-    // setSubmitted(true);
+    console.log("saveReview data: ", data);
 
     if (editing === false) {
-      console.log(props.editing);
+      console.log(editing);
 
       MovieDataService.createReview(data)
         .then((response) => {
@@ -83,13 +44,8 @@ const AddReview = (props) => {
     } else if (editing === true) {
       console.log(editing);
 
-      // MovieDataService.updateReview(rev._id, index);
       console.log(`editing data: `, data);
-      MovieDataService.updateReview(
-        "6568f326373f0e803811e0a1",
-        "auth0|6568e3c8cc59856df9af6a0e",
-        "test text"
-      )
+      MovieDataService.updateReview(data)
         .then((response) => {
           setSubmitted(true);
         })
@@ -116,7 +72,7 @@ const AddReview = (props) => {
            */}
           <form>
             <textarea
-              value={review}
+              value={props.review}
               placeholder="Add a review"
               className="w-full"
               onChange={onChangeReview}
