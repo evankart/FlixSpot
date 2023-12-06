@@ -20,6 +20,10 @@ const MoviesList = () => {
     retrieveRatings();
   }, []);
 
+  useEffect(() => {
+    find(searchTitle, searchRating);
+  }, [searchTitle, searchRating]);
+
   const retrieveMovies = () => {
     MovieDataService.getAll()
       .then((response) => {
@@ -53,17 +57,23 @@ const MoviesList = () => {
       });
   };
 
-  const findByTitle = (searchTitle) => {
-    find(searchTitle, "title");
+  const findMovie = () => {
+    console.log(
+      `find by searchTitle: ${searchTitle} and searchRating: ${searchRating}`
+    );
+    find(searchTitle, searchRating);
   };
+  // const findByTitle = (searchTitle) => {
+  //   find(searchTitle, "title");
+  // };
 
-  const findByRating = (searchRating) => {
-    if (searchRating === "All Ratings") {
-      retrieveMovies();
-    } else {
-      find(searchRating, "rated");
-    }
-  };
+  // const findByRating = (searchRating) => {
+  //   if (searchRating === "All Ratings") {
+  //     retrieveMovies();
+  //   } else {
+  //     find(searchRating, "rated");
+  //   }
+  // };
 
   return (
     <div className="max-w-[1200px] mx-auto">
@@ -74,7 +84,8 @@ const MoviesList = () => {
           value={searchTitle}
           onChange={(e) => {
             setSearchTitle(e.target.value);
-            findByTitle(e.target.value);
+            // findMovie();
+            // findByTitle(e.target.value);
           }}
           placeholder="Search by Title"
         />
@@ -85,7 +96,8 @@ const MoviesList = () => {
           value={searchRating}
           onChange={(e) => {
             setSearchRating(e.target.value);
-            findByRating(e.target.value);
+            // findMovie();
+            // findByRating(e.target.value);
           }}
           placeholder="Search by Rating"
         >
