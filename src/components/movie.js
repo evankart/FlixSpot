@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 import moment from "moment";
 import { useAuth0 } from "@auth0/auth0-react";
 import Review from "./review";
+import AddReview from "./add-review";
 
 const Movie = (props) => {
   let { id } = useParams();
@@ -13,7 +14,6 @@ const Movie = (props) => {
   const [reviewId, setReviewId] = useState("");
   const [editing, setEditing] = useState(false);
   const [submitted, setSubmitted] = useState(false);
-
   const [movie, setMovie] = useState({
     id: id,
     title: "",
@@ -90,22 +90,9 @@ const Movie = (props) => {
       });
   };
 
-  // console.log(`props: `, props);
-
-  // let editing = false;
-  // const [editing, setEditing] = useState(false);
-
-  // let { id } = useParams();
-
-  const onChangeReview = (e) => {
-    const newReview = e.target.value;
-    setReview(newReview);
-  };
-
   let data;
-  const saveReview = () => {
+  function saveReview() {
     data = {
-      // review: props.review,
       review: review,
       review_id: props.review_id,
       name: props.user.name,
@@ -126,7 +113,6 @@ const Movie = (props) => {
           console.log(e);
         });
     } else if (editing === true) {
-      // console.log(`editing data: `, data);
       MovieDataService.updateReview(reviewId, data.user_id, data.review)
         .then((response) => {
           setSubmitted(true);
@@ -138,7 +124,7 @@ const Movie = (props) => {
     } else {
       console.log("neither");
     }
-  };
+  }
 
   return (
     <div className="my-5 sm:w-7/8 lg:w-3/5 mx-auto h-[80vh]">
@@ -157,48 +143,14 @@ const Movie = (props) => {
           <p className="mb-3">{movie.plot}</p>
           {isAuthenticated && (
             <>
-              <div
-                id="addReviewWrapper"
-                // className="hidden"
-              >
-                <div>
-                  {submitted ? (
-                    <div>
-                      <h4>Review submitted successfully! </h4>
-                    </div>
-                  ) : (
-                    <>
-                      {/*
-                       * on first load show add review box
-                       * on clicking Submit, add review to list hide the text box and submit button, show success message
-                       */}
-                      <form>
-                        <textarea
-                          value={props.review}
-                          placeholder="Add a review"
-                          className="w-full"
-                          onChange={onChangeReview}
-                          onKeyDown={(e) => {
-                            if (e.key === "Enter") {
-                              saveReview();
-                            }
-                          }}
-                        />
-
-                        <button
-                          className="flex ml-auto font-bold"
-                          onClick={(e) => {
-                            e.preventDefault();
-                            saveReview();
-                          }}
-                          type="submit"
-                        >
-                          {editing ? "Submit Edited Review" : "Submit Review"}
-                        </button>
-                      </form>
-                    </>
-                  )}
-                </div>
+              <div id="addReviewWrapper">
+                <AddReview
+                  buttonVal={"Submit Review"}
+                  saveReview={saveReview}
+                  setReview={setReview}
+                  successMessage={"Review Submitted Successfully!"}
+                  submitted={submitted}
+                ></AddReview>
               </div>
             </>
           )}
@@ -219,53 +171,12 @@ const Movie = (props) => {
                   id={id}
                   setMovie={setMovie}
                   setEditing={setEditing}
+                  editing={editing}
+                  saveReview={saveReview}
+                  submitted={submitted}
+                  saveReview={saveReview}
+                  setReview={setReview}
                 ></Review>
-                {/* <h3 className="text-sm">
-                  <strong>{`${rev.name} `}</strong>
-                  {`reviewed on ${moment(rev.date).format("Do MMMM YYYY")}`}
-                </h3>
-                <p className="text-sm">{rev.review}</p>
-
-                {isAuthenticated && rev.user_id === userId && (
-                  <div className="h-4">
-                    <button
-                      className="bg-teal px-2 text-xs h-full mr-2 rounded-xl font-bold"
-                      onClick={() => {
-                        setEditing((editing) => !editing);
-                        setReviewId(rev._id);
-                        if (rev.user_id === userId) {
-                          updateReview(rev._id, index, review);
-                        } else {
-                          alert(
-                            "Sorry, you can only edit or delete your own reviews"
-                          );
-                        }
-                      }}
-                    >
-                      Edit
-                    </button>
-
-                    <button
-                      className="bg-teal px-2 text-xs h-full mr-2 rounded-xl font-bold"
-                      onClick={() => {
-                        if (rev.user_id === userId) {
-                          deleteReview(rev._id, index);
-                        } else {
-                          console.log("failed");
-                          alert(
-                            "Sorry, you can only edit or delete your own reviews"
-                          );
-                        }
-                      }}
-                    >
-                      Delete
-                    </button>
-                  </div>
-                )}
-                {editing && movie.reviews[index] == rev && (
-                  <div>EDIT YOUR REVIEW IN THE BOX ABOVE</div>
-                )}
-              </div> */}
               </div>
             );
           })}
