@@ -12,6 +12,7 @@ const Movie = (props) => {
   const [review, setReview] = useState("");
   const [reviewId, setReviewId] = useState("");
   const [editing, setEditing] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
 
   const [movie, setMovie] = useState({
     id: id,
@@ -27,6 +28,10 @@ const Movie = (props) => {
   useEffect(() => {
     console.log("review: ", review);
   }, [review]);
+
+  useEffect(() => {
+    console.log("reviewId: ", reviewId);
+  }, [reviewId]);
 
   useEffect(() => {
     console.log("editing: ", editing);
@@ -46,6 +51,7 @@ const Movie = (props) => {
     getMovie(id);
   }, [
     id,
+    submitted,
     // movie
   ]);
 
@@ -90,7 +96,6 @@ const Movie = (props) => {
   // const [editing, setEditing] = useState(false);
 
   // let { id } = useParams();
-  const [submitted, setSubmitted] = useState(false);
 
   const onChangeReview = (e) => {
     const newReview = e.target.value;
@@ -100,7 +105,8 @@ const Movie = (props) => {
   let data;
   const saveReview = () => {
     data = {
-      review: props.review,
+      // review: props.review,
+      review: review,
       review_id: props.review_id,
       name: props.user.name,
       user_id: props.user.sub,
@@ -110,8 +116,6 @@ const Movie = (props) => {
     console.log("saveReview data: ", data);
 
     if (editing === false) {
-      // console.log(editing);
-
       MovieDataService.createReview(data)
         .then((response) => {
           const val = true;
@@ -122,10 +126,8 @@ const Movie = (props) => {
           console.log(e);
         });
     } else if (editing === true) {
-      // console.log(editing);
-
       // console.log(`editing data: `, data);
-      MovieDataService.updateReview(data)
+      MovieDataService.updateReview(reviewId, data.user_id, data.review)
         .then((response) => {
           setSubmitted(true);
         })
@@ -213,6 +215,10 @@ const Movie = (props) => {
                   setReviewId={setReviewId}
                   updateReview={updateReview}
                   movie={movie}
+                  getMovie={getMovie}
+                  id={id}
+                  setMovie={setMovie}
+                  setEditing={setEditing}
                 ></Review>
                 {/* <h3 className="text-sm">
                   <strong>{`${rev.name} `}</strong>

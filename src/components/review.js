@@ -13,13 +13,35 @@ const Review = (props) => {
   // rev.date = props.rev.date;
   const index = props.index;
   const userId = props.userId;
-  const deleteReview = props.deleteReview;
+  // const deleteReview = props.deleteReview;
   const setReviewId = props.setReviewId;
   const updateReview = props.updateReview;
   const review = props.review;
   const movie = props.movie;
+  const id = props.id;
 
-  const [editing, setEditing] = useState(false);
+  // const [editing, setEditing] = useState(false);
+
+  useEffect(() => {
+    console.log("editing: ", props.editing);
+  }, [props.editing]);
+
+  const deleteReview = (reviewId, index) => {
+    MovieDataService.deleteReview(reviewId, userId, id)
+      .then(() => {
+        const newArray = [
+          ...movie.reviews.slice(0, index),
+          ...movie.reviews.slice(index + 1),
+        ];
+
+        const newMovie = movie;
+        newMovie.reviews = newArray;
+        props.setMovie(newMovie);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
   return (
     <>
       <div>
@@ -34,13 +56,13 @@ const Review = (props) => {
             <button
               className="bg-teal px-2 text-xs h-full mr-2 rounded-xl font-bold"
               onClick={() => {
-                setEditing((editing) => !editing);
-                // setReviewId(rev._id);
-                if (rev.user_id === userId) {
-                  updateReview(rev._id, index, review);
-                } else {
-                  alert("Sorry, you can only edit or delete your own reviews");
-                }
+                props.setEditing((editing) => !editing);
+                setReviewId(rev._id);
+                // if (rev.user_id === userId) {
+                //   updateReview(rev._id, index, review);
+                // } else {
+                //   alert("Sorry, you can only edit or delete your own reviews");
+                // }
               }}
             >
               Edit
@@ -51,8 +73,8 @@ const Review = (props) => {
               onClick={() => {
                 if (rev.user_id === userId) {
                   deleteReview(rev._id, index);
+                  props.getMovie(props.id);
                 } else {
-                  console.log("failed");
                   alert("Sorry, you can only edit or delete your own reviews");
                 }
               }}
@@ -61,7 +83,7 @@ const Review = (props) => {
             </button>
           </div>
         )}
-        {editing && movie.reviews[index] == rev && (
+        {props.editing && movie.reviews[index] == rev && (
           <div>EDIT YOUR REVIEW IN THE BOX ABOVE</div>
         )}
       </div>
