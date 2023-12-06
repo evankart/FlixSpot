@@ -1,15 +1,19 @@
 import { useState, useEffect } from "react";
 import MovieDataService from "../services/movies";
 import { useParams } from "react-router-dom";
-import moment from "moment";
 import { useAuth0 } from "@auth0/auth0-react";
 import Review from "./review";
 import AddReview from "./add-review";
 
 const Movie = (props) => {
-  let { id } = useParams();
+  // User authentication
   const isAuthenticated = useAuth0();
+  const { id } = useParams();
+  const { user } = useAuth0();
+  let userId;
+  user ? (userId = user.sub) : (userId = "");
 
+  // Init state variables
   const [review, setReview] = useState("");
   const [reviewId, setReviewId] = useState("");
   const [editing, setEditing] = useState(false);
@@ -20,10 +24,6 @@ const Movie = (props) => {
     rated: "",
     reviews: [],
   });
-
-  const { user } = useAuth0();
-  let userId;
-  user ? (userId = user.sub) : (userId = "");
 
   useEffect(() => {
     console.log("review: ", review);
@@ -49,46 +49,7 @@ const Movie = (props) => {
 
   useEffect(() => {
     getMovie(id);
-  }, [
-    id,
-    submitted,
-    // movie
-  ]);
-
-  const deleteReview = (reviewId, index) => {
-    MovieDataService.deleteReview(reviewId, userId, id)
-      .then(() => {
-        const newArray = [
-          ...movie.reviews.slice(0, index),
-          ...movie.reviews.slice(index + 1),
-        ];
-
-        const newMovie = movie;
-        newMovie.reviews = newArray;
-        setMovie(newMovie);
-      })
-      .catch((e) => {
-        console.log(e);
-      });
-  };
-
-  const updateReview = (reviewId, index, newReview) => {
-    MovieDataService.updateReview(reviewId, userId, newReview)
-      .then(() => {
-        const newArray = [
-          ...movie.reviews.slice(0, index),
-          newReview,
-          ...movie.reviews.slice(index + 1),
-        ];
-
-        const newMovie = movie;
-        newMovie.reviews = newArray;
-        setMovie(newMovie);
-      })
-      .catch((e) => {
-        console.log(e);
-      });
-  };
+  }, [id, submitted]);
 
   let data;
   function saveReview() {
@@ -105,9 +66,8 @@ const Movie = (props) => {
     if (editing === false) {
       MovieDataService.createReview(data)
         .then((response) => {
-          const val = true;
-          setSubmitted(val);
-          console.log(response.data);
+          setSubmitted(true);
+          // console.log(response.data);
         })
         .catch((e) => {
           console.log(e);
@@ -115,14 +75,13 @@ const Movie = (props) => {
     } else if (editing === true) {
       MovieDataService.updateReview(reviewId, data.user_id, data.review)
         .then((response) => {
+          // console.log(response);
           setSubmitted(true);
         })
         .catch((e) => {
           console.log(e);
         });
       setEditing(false);
-    } else {
-      console.log("neither");
     }
   }
 
@@ -146,9 +105,9 @@ const Movie = (props) => {
               <div id="addReviewWrapper">
                 <AddReview
                   buttonVal={"Submit Review"}
+                  successMessage={"Review Submitted Successfully!"}
                   saveReview={saveReview}
                   setReview={setReview}
-                  successMessage={"Review Submitted Successfully!"}
                   submitted={submitted}
                 ></AddReview>
               </div>
@@ -160,12 +119,10 @@ const Movie = (props) => {
             return (
               <div className="mb-3">
                 <Review
-                  rev={movie.reviews[index]}
                   index={index}
+                  rev={rev}
                   userId={userId}
-                  deleteReview={deleteReview}
                   setReviewId={setReviewId}
-                  updateReview={updateReview}
                   movie={movie}
                   getMovie={getMovie}
                   id={id}
@@ -174,7 +131,6 @@ const Movie = (props) => {
                   editing={editing}
                   saveReview={saveReview}
                   submitted={submitted}
-                  saveReview={saveReview}
                   setReview={setReview}
                 ></Review>
               </div>

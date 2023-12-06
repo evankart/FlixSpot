@@ -1,6 +1,5 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import MovieDataService from "../services/movies";
-import { useParams } from "react-router-dom";
 import moment from "moment";
 import { useAuth0 } from "@auth0/auth0-react";
 import AddReview from "./add-review";
@@ -9,26 +8,36 @@ const Review = ({
   rev,
   index,
   userId,
-  deleteReview,
   setReviewId,
-  updateReview,
   movie,
   getMovie,
   id,
   setMovie,
   setEditing,
-  editing,
   submitted,
   saveReview,
   setReview,
+  editing,
 }) => {
   const isAuthenticated = useAuth0();
   const [editingReview, setEditingReview] = useState(false);
-  const [edited, setEdited] = useState(false);
 
-  useEffect(() => {
-    console.log("editingReview", editingReview);
-  }, [editingReview]);
+  const deleteReview = (reviewId, index) => {
+    MovieDataService.deleteReview(reviewId, userId, id)
+      .then(() => {
+        const newArray = [
+          ...movie.reviews.slice(0, index),
+          ...movie.reviews.slice(index + 1),
+        ];
+
+        const newMovie = movie;
+        newMovie.reviews = newArray;
+        setMovie(newMovie);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
 
   return (
     <>
@@ -74,14 +83,12 @@ const Review = ({
           {editingReview && movie.reviews[index] === rev && (
             <div className="mt-3">
               <AddReview
-                editingReview={editingReview}
-                setEditingReview={setEditingReview}
-                buttonVal={"Update Review"}
+                buttonText={"Update Review"}
+                successMessage={"Review Updated Successfully!"}
                 saveReview={saveReview}
                 setReview={setReview}
-                successMessage={"Review Updated Successfully!"}
                 submitted={submitted}
-                edited={edited}
+                editing={editing}
               ></AddReview>
             </div>
           )}

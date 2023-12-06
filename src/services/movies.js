@@ -15,19 +15,10 @@ class MovieDataService {
   //   return axios.get(`${base}/review/${review_id}`);
   // }
 
-  // find(query, by, page = 0) {
-  //   console.log("get URL: ", `${base}?${by}=${query}&page=${page}`);
-  //   return axios.get(`${base}?${by}=${query}&page=${page}`);
-
-  //   // return axios.get(`${base}?${by}=${query}&page=${page}`);
-  // }
-
   find(title, rated) {
     let page = 0;
     console.log("get URL: ", `${base}?title=${title}&page=${page}`);
     return axios.get(`${base}?$rated=${rated}&title=${title}&page=${page}`);
-
-    // return axios.get(`${base}?${by}=${query}&page=${page}`);
   }
 
   createReview(data) {

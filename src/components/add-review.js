@@ -1,21 +1,13 @@
-import { useState, useEffect } from "react";
-import MovieDataService from "../services/movies";
-import { useParams } from "react-router-dom";
-import moment from "moment";
-import { useAuth0 } from "@auth0/auth0-react";
-
 const AddReview = ({
   saveReview,
   review,
-  buttonVal,
+  buttonText,
   setReview,
   submitted,
-  edited,
   successMessage,
 }) => {
   const onChangeReview = (e) => {
-    const newReview = e.target.value;
-    setReview(newReview);
+    setReview(e.target.value);
   };
   return (
     <>
@@ -32,6 +24,7 @@ const AddReview = ({
             onChange={onChangeReview}
             onKeyDown={(e) => {
               if (e.key === "Enter") {
+                e.preventDefault();
                 saveReview();
               }
             }}
@@ -45,7 +38,7 @@ const AddReview = ({
             }}
             type="submit"
           >
-            {buttonVal}
+            {buttonText}
           </button>
         </form>
       )}
