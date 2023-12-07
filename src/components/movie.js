@@ -98,7 +98,7 @@ const Movie = (props) => {
 
         <div className="w-full mx-auto p-5 sm:w-3/5">
           <p className="mb-3">{movie.plot}</p>
-          {isAuthenticated && (
+          {isAuthenticated && user && (
             <>
               <div id="addReviewWrapper">
                 <AddReview
@@ -130,9 +130,7 @@ const Movie = (props) => {
               </div>
             );
           })}
-          {!isAuthenticated && (
-            <div>Please log in to edit and delete reviews</div>
-          )}
+          {!user && <div>Please log in to add reviews.</div>}
         </div>
       </div>
     </div>
