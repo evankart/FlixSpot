@@ -1,4 +1,4 @@
-const EditReview = ({ saveReview, review, setReview, edited, setEdited }) => {
+const EditReview = ({ edited, setReview, saveReview }) => {
   const onChangeReview = (e) => {
     setReview(e.target.value);
   };
@@ -11,7 +11,6 @@ const EditReview = ({ saveReview, review, setReview, edited, setEdited }) => {
       ) : (
         <form>
           <textarea
-            value={review}
             placeholder="Update your review"
             className="w-full"
             onChange={onChangeReview}
@@ -19,7 +18,6 @@ const EditReview = ({ saveReview, review, setReview, edited, setEdited }) => {
               if (e.key === "Enter") {
                 e.preventDefault();
                 saveReview();
-                setEdited((edited) => !edited);
               }
             }}
           />
@@ -29,7 +27,6 @@ const EditReview = ({ saveReview, review, setReview, edited, setEdited }) => {
             onClick={(e) => {
               e.preventDefault();
               saveReview();
-              setEdited((edited) => !edited);
             }}
             type="submit"
           >

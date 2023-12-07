@@ -1,27 +1,28 @@
 import { useState } from "react";
+import { useParams } from "react-router-dom";
 import MovieDataService from "../services/movies";
 import moment from "moment";
 import { useAuth0 } from "@auth0/auth0-react";
 import EditReview from "./edit-review";
 
 const Review = ({
-  rev,
   index,
+  rev,
   userId,
   setReviewId,
   movie,
   getMovie,
-  id,
   setMovie,
   setEditing,
-  submitted,
   saveReview,
   setReview,
-  editing,
+  edited,
 }) => {
+
+  const { id } = useParams();
   const isAuthenticated = useAuth0();
+  
   const [editingReview, setEditingReview] = useState(false);
-  const [edited, setEdited] = useState(false);
 
   const deleteReview = (reviewId, index) => {
     MovieDataService.deleteReview(reviewId, userId, id)
@@ -38,6 +39,7 @@ const Review = ({
       .catch((e) => {
         console.log(e);
       });
+    getMovie(id);
   };
 
   return (
@@ -68,7 +70,6 @@ const Review = ({
                 onClick={() => {
                   if (rev.user_id === userId) {
                     deleteReview(rev._id, index);
-                    getMovie(id);
                   } else {
                     alert(
                       "Sorry, you can only edit or delete your own reviews"
@@ -84,12 +85,9 @@ const Review = ({
           {editingReview && movie.reviews[index] === rev && (
             <div className="mt-3">
               <EditReview
-                saveReview={saveReview}
-                setReview={setReview}
-                submitted={submitted}
-                editing={editing}
                 edited={edited}
-                setEdited={setEdited}
+                setReview={setReview}
+                saveReview={saveReview}
               />
             </div>
           )}

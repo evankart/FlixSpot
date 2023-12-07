@@ -11,10 +11,6 @@ class MovieDataService {
     return axios.get(`${base}/${id}`);
   }
 
-  // get(review_id) {
-  //   return axios.get(`${base}/review/${review_id}`);
-  // }
-
   find(title, rated) {
     let page = 0;
     console.log("get URL: ", `${base}?title=${title}&page=${page}`);
@@ -22,24 +18,16 @@ class MovieDataService {
   }
 
   createReview(data) {
-    console.log(`CREATE REVIEW POST SERVICE`);
-    console.log(`(POST) data: `, data);
+    // console.log(`CREATE REVIEW POST SERVICE`);
+    // console.log(`(POST) data: `, data);
     return axios.post(`${base}/review`, data);
   }
   updateReview(review_id, user_id, review) {
-    console.log(`UPDATE REVIEW PUT SERVICE`);
-    console.log(`(PUT) review_id: ${review_id}`);
-    console.log(`(PUT) userId: ${user_id}`);
-    console.log(`(PUT) review: ${review}`);
-    console.log(`(PUT) request URL: ${base}/${review_id}`);
-
-    let data = {
-      review_id: review_id,
-      user_id: user_id,
-      review: review,
-    };
-
-    console.log("data: ", data);
+    // console.log(`UPDATE REVIEW PUT SERVICE`);
+    // console.log(`(PUT) review_id: ${review_id}`);
+    // console.log(`(PUT) userId: ${user_id}`);
+    // console.log(`(PUT) review: ${review}`);
+    // console.log(`(PUT) request URL: ${base}/${review_id}`);
 
     return axios
       .put(`${base}/${review_id}`, {
@@ -65,10 +53,6 @@ class MovieDataService {
       });
   }
   deleteReview(review_id, user_id) {
-    console.log(`DELETE REVIEW DELETE SERVICE`);
-    console.log(`(DELETE) review_id: ${review_id}`);
-    console.log(`(DELETE) userId: ${user_id}`);
-
     return axios.delete(`${base}/review`, {
       data: { review_id: review_id, user_id: user_id },
     });

@@ -18,6 +18,7 @@ const Movie = (props) => {
   const [reviewId, setReviewId] = useState("");
   const [editing, setEditing] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [edited, setEdited] = useState(false);
 
   const [movie, setMovie] = useState({
     id: id,
@@ -26,17 +27,17 @@ const Movie = (props) => {
     reviews: [],
   });
 
-  useEffect(() => {
-    console.log("review: ", review);
-  }, [review]);
+  // useEffect(() => {
+  //   console.log("review: ", review);
+  // }, [review]);
 
-  useEffect(() => {
-    console.log("reviewId: ", reviewId);
-  }, [reviewId]);
+  // useEffect(() => {
+  //   console.log("reviewId: ", reviewId);
+  // }, [reviewId]);
 
-  useEffect(() => {
-    console.log("editing: ", editing);
-  }, [editing]);
+  // useEffect(() => {
+  //   console.log("editing: ", editing);
+  // }, [editing]);
 
   const getMovie = (id) => {
     MovieDataService.get(id)
@@ -48,9 +49,10 @@ const Movie = (props) => {
       });
   };
 
+  // Refresh the movie when movie id is updated or review is submitted
   useEffect(() => {
     getMovie(id);
-  }, [id, submitted]);
+  }, [id, submitted, edited]);
 
   let data;
   function saveReview() {
@@ -62,28 +64,23 @@ const Movie = (props) => {
       movie_id: id,
     };
 
-    console.log("saveReview data: ", data);
-
-    if (editing === false) {
-      MovieDataService.createReview(data)
-        .then((response) => {
-          setSubmitted(true);
-          // console.log(response.data);
-        })
-        .catch((e) => {
-          console.log(e);
-        });
-    } else if (editing === true) {
-      MovieDataService.updateReview(reviewId, data.user_id, data.review)
-        .then((response) => {
-          // console.log(response);
-          setSubmitted(true);
-        })
-        .catch((e) => {
-          console.log(e);
-        });
-      setEditing(false);
-    }
+    // if not editing, create a new review. If editing, update existing review
+    !editing
+      ? MovieDataService.createReview(data)
+          .then((response) => {
+            setSubmitted(true);
+          })
+          .catch((e) => {
+            console.log(e);
+          })
+      : MovieDataService.updateReview(reviewId, data.user_id, data.review)
+          .then((response) => {
+            setEdited(true);
+          })
+          .catch((e) => {
+            console.log(e);
+          });
+    setEditing(false);
   }
 
   return (
@@ -108,7 +105,6 @@ const Movie = (props) => {
                   saveReview={saveReview}
                   setReview={setReview}
                   submitted={submitted}
-                  setSubmitted={setSubmitted}
                 ></AddReview>
               </div>
             </>
@@ -125,13 +121,11 @@ const Movie = (props) => {
                   setReviewId={setReviewId}
                   movie={movie}
                   getMovie={getMovie}
-                  id={id}
                   setMovie={setMovie}
                   setEditing={setEditing}
-                  editing={editing}
                   saveReview={saveReview}
-                  submitted={submitted}
                   setReview={setReview}
+                  edited={edited}
                 ></Review>
               </div>
             );
