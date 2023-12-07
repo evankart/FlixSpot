@@ -6,13 +6,19 @@ const MoviesList = () => {
   const [movies, setMovies] = useState([]);
   const [searchTitle, setSearchTitle] = useState("");
   const [searchRating, setSearchRating] = useState("");
+  const [resultsCount, setResultsCount] = useState();
+  const [pageCount, setPageCount] = useState(1);
 
   const ratings = ["All Ratings", "G", "PG", "PG-13", "R", "UNRATED"];
-
   // Retrieve movies on page load
   useEffect(() => {
-    retrieveMovies();
-  }, []);
+    retrieveMovies(pageCount);
+  }, [pageCount]);
+
+  useEffect(() => {
+    setResultsCount(movies.length);
+    console.log(resultsCount);
+  }, [movies]);
 
   // Update movie lis when search terms are updated
   useEffect(() => {
@@ -20,9 +26,10 @@ const MoviesList = () => {
   }, [searchTitle, searchRating]);
 
   const retrieveMovies = () => {
-    MovieDataService.getAll()
+    MovieDataService.getAll(pageCount - 1)
       .then((response) => {
         const newMovies = response.data.movies;
+
         setMovies(newMovies);
       })
       .catch((e) => {
@@ -39,6 +46,7 @@ const MoviesList = () => {
       .catch((e) => {
         console.log(e);
       });
+    setPageCount(1);
   };
 
   return (
@@ -71,7 +79,6 @@ const MoviesList = () => {
           })}
         </select>
       </form>
-
       <div className="flex flex-wrap max-w-7xl mx-auto">
         {movies.map((movie) => {
           let posterSrc;
@@ -109,6 +116,31 @@ const MoviesList = () => {
             </div>
           );
         })}
+      </div>
+      <div className="page-counter text-center m-3 mb-6 flex justify-center">
+        <button
+          className="px-2 mx-1 bg-white rounded shadow-lg"
+          onClick={() => {
+            if (pageCount > 1) {
+              setPageCount(pageCount - 1);
+            }
+            console.log(pageCount);
+          }}
+        >
+          &#60;
+        </button>
+        <div className="font-bold mx-2">Page {pageCount}</div>
+        <button
+          className="px-2 mx-1 bg-white rounded shadow-lg"
+          onClick={() => {
+            if (resultsCount === 12) {
+              setPageCount(pageCount + 1);
+            }
+            console.log(pageCount);
+          }}
+        >
+          &#62;
+        </button>
       </div>
     </div>
   );
