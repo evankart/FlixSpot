@@ -1,3 +1,5 @@
+import { useAuth0 } from "@auth0/auth0-react";
+
 const AddReview = ({ submitted, setReview, saveReview }) => {
   const onChangeReview = (e) => {
     setReview(e.target.value);
