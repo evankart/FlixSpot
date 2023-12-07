@@ -18,6 +18,7 @@ const Movie = (props) => {
   const [reviewId, setReviewId] = useState("");
   const [editing, setEditing] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+
   const [movie, setMovie] = useState({
     id: id,
     title: "",
@@ -104,11 +105,10 @@ const Movie = (props) => {
             <>
               <div id="addReviewWrapper">
                 <AddReview
-                  buttonVal={"Submit Review"}
-                  successMessage={"Review Submitted Successfully!"}
                   saveReview={saveReview}
                   setReview={setReview}
                   submitted={submitted}
+                  setSubmitted={setSubmitted}
                 ></AddReview>
               </div>
             </>

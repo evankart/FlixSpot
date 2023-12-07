@@ -1,31 +1,25 @@
-const AddReview = ({
-  saveReview,
-  review,
-  setReview,
-  submitted,
-  setSubmitted,
-}) => {
+const EditReview = ({ saveReview, review, setReview, edited, setEdited }) => {
   const onChangeReview = (e) => {
     setReview(e.target.value);
   };
   return (
     <>
-      {submitted ? (
+      {edited ? (
         <div>
-          <h4>Review submitted successfully!</h4>
+          <h4>Review updated successfully!</h4>
         </div>
       ) : (
         <form>
           <textarea
             value={review}
-            placeholder="Add a review"
+            placeholder="Update your review"
             className="w-full"
             onChange={onChangeReview}
             onKeyDown={(e) => {
               if (e.key === "Enter") {
                 e.preventDefault();
                 saveReview();
-                setSubmitted(true);
+                setEdited((edited) => !edited);
               }
             }}
           />
@@ -35,11 +29,11 @@ const AddReview = ({
             onClick={(e) => {
               e.preventDefault();
               saveReview();
-              setSubmitted(true);
+              setEdited((edited) => !edited);
             }}
             type="submit"
           >
-            Submit Review
+            Update Review
           </button>
         </form>
       )}
@@ -47,4 +41,4 @@ const AddReview = ({
   );
 };
 
-export default AddReview;
+export default EditReview;

@@ -2,7 +2,7 @@ import { useState } from "react";
 import MovieDataService from "../services/movies";
 import moment from "moment";
 import { useAuth0 } from "@auth0/auth0-react";
-import AddReview from "./add-review";
+import EditReview from "./edit-review";
 
 const Review = ({
   rev,
@@ -21,6 +21,7 @@ const Review = ({
 }) => {
   const isAuthenticated = useAuth0();
   const [editingReview, setEditingReview] = useState(false);
+  const [edited, setEdited] = useState(false);
 
   const deleteReview = (reviewId, index) => {
     MovieDataService.deleteReview(reviewId, userId, id)
@@ -82,14 +83,14 @@ const Review = ({
 
           {editingReview && movie.reviews[index] === rev && (
             <div className="mt-3">
-              <AddReview
-                buttonText={"Update Review"}
-                successMessage={"Review Updated Successfully!"}
+              <EditReview
                 saveReview={saveReview}
                 setReview={setReview}
                 submitted={submitted}
                 editing={editing}
-              ></AddReview>
+                edited={edited}
+                setEdited={setEdited}
+              />
             </div>
           )}
         </div>

@@ -1,7 +1,7 @@
 import axios from "axios";
 
-const base = "https://flixspot-backend.vercel.app/api/v1/movies";
-// const base = "http://localhost:5000/api/v1/movies";
+// const base = "https://flixspot-backend.vercel.app/api/v1/movies";
+const base = "http://localhost:5000/api/v1/movies";
 
 class MovieDataService {
   getAll(page = 0) {
