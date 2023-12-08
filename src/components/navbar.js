@@ -91,20 +91,10 @@ export default function Navbar(props) {
                   >
                     Home
                   </Link>
-
-                  {/* Show Profile link in navbar when user is logged in */}
-                  {/* {user ? (
-                    <Link
-                      to={"/profile"}
-                      className="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium"
-                    >
-                      Profile
-                    </Link>
-                  ) : null} */}
                 </div>
               </div>
               {user ? (
-                <p class="ml-auto text-gray-300   rounded-md px-3 py-2 text-sm font-medium">
+                <p class="sm:ml-auto text-gray-300 rounded-md px-3 py-2 text-sm font-medium">
                   Hi, {user.given_name ? user.given_name : user.name}
                 </p>
               ) : (

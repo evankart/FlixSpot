@@ -15,7 +15,7 @@ const AddReview = ({ submitted, setReview, saveReview }) => {
         <form>
           <textarea
             placeholder="Add a review"
-            className="w-full"
+            className="w-full rounded-lg p-2"
             onChange={onChangeReview}
             onKeyDown={(e) => {
               if (e.key === "Enter") {
