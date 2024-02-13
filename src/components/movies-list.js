@@ -8,6 +8,7 @@ const MoviesList = () => {
   const [searchRating, setSearchRating] = useState("");
   const [resultsCount, setResultsCount] = useState();
   const [pageCount, setPageCount] = useState(1);
+  const [popularMovies, setPopularMovies] = useState([]);
 
   const ratings = ["All Ratings", "G", "PG", "PG-13", "R", "UNRATED"];
   // Retrieve movies on page load
@@ -15,17 +16,40 @@ const MoviesList = () => {
     retrieveMovies(pageCount);
   }, [pageCount]);
 
-  // console.log("resultsCount: ", resultsCount);
+  useEffect(() => {
+    // // themoviedb API
+    const url = "https://api.themoviedb.org/3/movie/popular";
+    const options = {
+      method: "GET",
+      headers: {
+        accept: "application/json",
+        Authorization:
+          "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI1MmE1N2RkYjU4NDVjODY1OWFmY2FlMjhhMDhiMjJmNiIsInN1YiI6IjY1Y2E5N2MzMTI5NzBjMDE3YmM1NWFiNCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.nJn5j2iz8sMUouM62xtJo5d4bstYzgmdp8HFVJD6Wio",
+      },
+    };
+
+    fetch(url, options)
+      .then((res) => res.json())
+      .then((json) => {
+        setPopularMovies(json.results);
+        console.log("popularMovies: ", json.results);
+      })
+      .catch((err) => console.error("error:" + err));
+  }, []);
 
   useEffect(() => {
     setResultsCount(movies.length);
     console.log(resultsCount);
-  }, [movies]);
+  }, [movies, resultsCount]);
 
   // Update movie lis when search terms are updated
   useEffect(() => {
     find(searchTitle, searchRating);
-  }, [searchTitle, searchRating]);
+  }, [searchTitle, searchRating, popularMovies]);
+
+  useEffect(() => {
+    console.log("popularMovies: ", popularMovies);
+  }, [popularMovies]);
 
   const retrieveMovies = () => {
     MovieDataService.getAll(pageCount - 1)
@@ -81,23 +105,48 @@ const MoviesList = () => {
           })}
         </select>
       </form>
+
       <div className="flex flex-wrap max-w-7xl mx-auto">
         {resultsCount === 0 ? (
           <div className="flex justify-center w-full my-5">
             No Results Found
           </div>
         ) : (
-          movies.map((movie) => {
-            let posterSrc;
-            if (!movie.poster) {
+          popularMovies.map((movie) => {
+            /* let posterSrc; */
+
+            let posterSrc = `https://www.themoviedb.org/t/p/w500/${movie.poster_path}`;
+
+            /* if (!movie.poster) {
               posterSrc =
                 "https://images.unsplash.com/photo-1507608616759-54f48f0af0ee?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=387&q=80";
             } else {
               posterSrc = movie.poster + "/100px180";
-            }
+            } */
+
+            const options = {
+              method: "GET",
+              headers: {
+                accept: "application/json",
+                Authorization:
+                  "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI1MmE1N2RkYjU4NDVjODY1OWFmY2FlMjhhMDhiMjJmNiIsInN1YiI6IjY1Y2E5N2MzMTI5NzBjMDE3YmM1NWFiNCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.nJn5j2iz8sMUouM62xtJo5d4bstYzgmdp8HFVJD6Wio",
+              },
+            };
+
+            let movieDetails = "";
+
+            fetch(`https://api.themoviedb.org/3/movie/${movie.id}`, options)
+              .then((response) => response.json())
+              .then((json) => {
+                console.log("movie details: ", json);
+                movieDetails = json;
+                console.log(movieDetails.overview);
+              })
+              .catch((err) => console.error(err));
+
             return (
               <div className="mx-auto max-w-[400px] sm:w-[32%] text-center justify-center p-5 mb-5 font-bold bg-white rounded-lg shadow-md">
-                <Link to={"/movies/" + movie._id}>
+                <Link to={"/movies/" + movie.id}>
                   <div>
                     <img
                       className=" w-full aspect-[2/3] object-cover mb-2 hover:opacity-80 transition-all"
@@ -113,12 +162,12 @@ const MoviesList = () => {
                 </Link>
 
                 <div className="flex justify-between text-xs w-[90%] mx-auto">
-                  <p> {movie.rated}</p>
-                  <Link to={"/movies/" + movie._id}>View Reviews</Link>
+                  <p> {movie.rated ? movie.rated : "No rating"}</p>
+                  <Link to={"/movies/" + movie.id}>View Reviews</Link>
                 </div>
                 <p className="text-base">{movie.title}</p>
                 <p className="font-normal text-sm text-justify w-[90%] mx-auto">
-                  {movie.plot}
+                  {movieDetails.overview}
                 </p>
               </div>
             );
