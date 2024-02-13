@@ -19,6 +19,7 @@ const Movie = (props) => {
   const [editing, setEditing] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [edited, setEdited] = useState(false);
+  const [reviews, setReviews] = useState();
 
   const [movie, setMovie] = useState({
     id: id,
@@ -39,19 +40,49 @@ const Movie = (props) => {
   //   console.log("editing: ", editing);
   // }, [editing]);
 
+  // const getMovie = (id) => {
+  //   MovieDataService.get(id)
+  //     .then((response) => {
+  //       setMovie(response.data);
+  //     })
+  //     .catch((e) => {
+  //       console.log(e);
+  //     });
+  // };
+
+  const options = {
+    method: "GET",
+    headers: {
+      accept: "application/json",
+      Authorization:
+        "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI1MmE1N2RkYjU4NDVjODY1OWFmY2FlMjhhMDhiMjJmNiIsInN1YiI6IjY1Y2E5N2MzMTI5NzBjMDE3YmM1NWFiNCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.nJn5j2iz8sMUouM62xtJo5d4bstYzgmdp8HFVJD6Wio",
+    },
+  };
+
   const getMovie = (id) => {
-    MovieDataService.get(id)
-      .then((response) => {
-        setMovie(response.data);
+    fetch(`https://api.themoviedb.org/3/movie/${id}`, options)
+      .then((response) => response.json())
+      .then((json) => {
+        setMovie(json);
+        console.log("movie details: ", json);
       })
-      .catch((e) => {
-        console.log(e);
-      });
+      .catch((err) => console.error(err));
+  };
+
+  const getReviews = (id) => {
+    fetch(`https://api.themoviedb.org/3/movie/${id}/reviews`, options)
+      .then((response) => response.json())
+      .then((json) => {
+        setReviews(json.results);
+        console.log("reviews: ", json);
+      })
+      .catch((err) => console.error(err));
   };
 
   // Refresh the movie when movie id is updated or review is submitted
   useEffect(() => {
     getMovie(id);
+    getReviews(id);
   }, [id, submitted, edited]);
 
   let data;
@@ -84,20 +115,20 @@ const Movie = (props) => {
   }
 
   return (
-    <div className="my-5 sm:w-7/8 lg:w-3/5 mx-auto h-[80vh]">
-      <h1 className="text-center font-poppins font-bold text-xl sm:text-2xl mb-3">
+    <div className="my-5 sm:w-7/8 lg:w-10/12 mx-auto h-[80vh]">
+      <h1 className="text-center font-poppins font-bold text-xl sm:text-2xl mb-5">
         {movie.title}
       </h1>
 
       <div className="flex flex-col sm:flex-row ">
         <img
-          className="w-[70%] w-max-[400px] mx-auto sm:w-2/5"
-          src={movie.poster + "/100px180"}
+          className="max-w-[400px] max-h-[600px] aspect-[2/3] object-cover sm:w-2/5"
+          src={`https://www.themoviedb.org/t/p/w500/${movie.poster_path}`}
           alt=""
         />
 
-        <div className="w-full mx-auto p-5 sm:w-3/5">
-          <p className="mb-3">{movie.plot}</p>
+        <div className="w-full mx-auto px-5 sm:w-3/5">
+          <p className="mb-3">{movie.overview}</p>
           {isAuthenticated && user && (
             <>
               <div id="addReviewWrapper">
@@ -111,25 +142,27 @@ const Movie = (props) => {
           )}
           <h1 className="font-bold my-2">Reviews:</h1>
 
-          {movie.reviews.map((rev, index) => {
-            return (
-              <div className="mb-3">
-                <Review
-                  index={index}
-                  rev={rev}
-                  userId={userId}
-                  setReviewId={setReviewId}
-                  movie={movie}
-                  getMovie={getMovie}
-                  setMovie={setMovie}
-                  setEditing={setEditing}
-                  saveReview={saveReview}
-                  setReview={setReview}
-                  edited={edited}
-                ></Review>
-              </div>
-            );
-          })}
+          {reviews &&
+            reviews.map((rev, index) => {
+              console.log("rev: ", rev);
+              return (
+                <div className="mb-3">
+                  <Review
+                    index={index}
+                    rev={rev}
+                    userId={userId}
+                    setReviewId={setReviewId}
+                    movie={movie}
+                    getMovie={getMovie}
+                    setMovie={setMovie}
+                    setEditing={setEditing}
+                    saveReview={saveReview}
+                    setReview={setReview}
+                    edited={edited}
+                  ></Review>
+                </div>
+              );
+            })}
           {!user && <div>Please log in to add reviews.</div>}
         </div>
       </div>
