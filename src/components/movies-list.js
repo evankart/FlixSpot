@@ -18,7 +18,7 @@ const MoviesList = () => {
 
   useEffect(() => {
     // // themoviedb API
-    const url = "https://api.themoviedb.org/3/movie/popular";
+    const url = "https://api.themoviedb.org/3/trending/movie/week";
     const options = {
       method: "GET",
       headers: {
