@@ -13,6 +13,22 @@ function App() {
     profilePicture = user.picture;
   }
 
+  // // themoviedb API
+  // const url = "https://api.themoviedb.org/3/authentication";
+  // const options = {
+  //   method: "GET",
+  //   headers: {
+  //     accept: "application/json",
+  //     Authorization:
+  //       "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI1MmE1N2RkYjU4NDVjODY1OWFmY2FlMjhhMDhiMjJmNiIsInN1YiI6IjY1Y2E5N2MzMTI5NzBjMDE3YmM1NWFiNCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.nJn5j2iz8sMUouM62xtJo5d4bstYzgmdp8HFVJD6Wio",
+  //   },
+  // };
+
+  // fetch(url, options)
+  //   .then((res) => res.json())
+  //   .then((json) => console.log(json))
+  //   .catch((err) => console.error("error:" + err));
+
   return (
     <div className="bg-f8 h-screen overflow-x-hidden font-poppins">
       <Navbar profilePicture={profilePicture} />
