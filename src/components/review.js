@@ -18,10 +18,9 @@ const Review = ({
   setReview,
   edited,
 }) => {
-
   const { id } = useParams();
   const isAuthenticated = useAuth0();
-  
+
   const [editingReview, setEditingReview] = useState(false);
 
   const deleteReview = (reviewId, index) => {
@@ -46,11 +45,13 @@ const Review = ({
     <>
       <div>
         <div>
-          <h3 className="text-sm">
-            <strong>{`${rev.name} `}</strong>
+          <h3 className="text-md mt-4 mb-1">
+            <strong>{`${rev.author} `}</strong>
             {`reviewed on ${moment(rev.date).format("Do MMMM YYYY")}`}
           </h3>
-          <p className="text-sm">{rev.review}</p>
+          <p className="text-sm italic">
+            {rev.content.substring(0, 300).trim() + "... (see more)"}
+          </p>
 
           {isAuthenticated && rev.user_id === userId && (
             <div className="h-4">
