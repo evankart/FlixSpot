@@ -9,6 +9,7 @@ const MoviesList = () => {
   const [resultsCount, setResultsCount] = useState();
   const [pageCount, setPageCount] = useState(1);
   const [popularMovies, setPopularMovies] = useState([]);
+  const [moviesWithDetails, setMoviesWithDetails] = useState([]);
 
   const ratings = ["All Ratings", "G", "PG", "PG-13", "R", "UNRATED"];
   // Retrieve movies on page load
@@ -36,6 +37,27 @@ const MoviesList = () => {
       })
       .catch((err) => console.error("error:" + err));
   }, []);
+
+  useEffect(() => {
+    const options = {
+      method: "GET",
+      headers: {
+        accept: "application/json",
+        Authorization:
+          "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI1MmE1N2RkYjU4NDVjODY1OWFmY2FlMjhhMDhiMjJmNiIsInN1YiI6IjY1Y2E5N2MzMTI5NzBjMDE3YmM1NWFiNCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.nJn5j2iz8sMUouM62xtJo5d4bstYzgmdp8HFVJD6Wio",
+      },
+    };
+
+    Promise.all(
+      popularMovies.map((movie) =>
+        fetch(`https://api.themoviedb.org/3/movie/${movie.id}`, options)
+          .then((response) => response.json())
+          .then((json) => ({ ...movie, details: json }))
+      )
+    )
+      .then((moviesWithDetails) => setMoviesWithDetails(moviesWithDetails))
+      .catch((err) => console.error(err));
+  }, [popularMovies]);
 
   useEffect(() => {
     setResultsCount(movies.length);
@@ -112,7 +134,7 @@ const MoviesList = () => {
             No Results Found
           </div>
         ) : (
-          popularMovies.map((movie) => {
+          moviesWithDetails.map((movie) => {
             /* let posterSrc; */
 
             let posterSrc = `https://www.themoviedb.org/t/p/w500/${movie.poster_path}`;
@@ -133,19 +155,15 @@ const MoviesList = () => {
               },
             };
 
-            let movieDetails = "";
-
             fetch(`https://api.themoviedb.org/3/movie/${movie.id}`, options)
               .then((response) => response.json())
               .then((json) => {
-                console.log("movie details: ", json);
-                movieDetails = json;
-                console.log(movieDetails.overview);
+                movie.details = json;
               })
               .catch((err) => console.error(err));
 
             return (
-              <div className="mx-auto max-w-[400px] sm:w-[32%] text-center justify-center p-5 mb-5 font-bold bg-white rounded-lg shadow-md">
+              <div className="mx-auto max-w-[400px] min-h-[300px] sm:w-[32%] text-center justify-center p-5 mb-5 font-bold bg-white rounded-lg shadow-md">
                 <Link to={"/movies/" + movie.id}>
                   <div>
                     <img
@@ -162,12 +180,23 @@ const MoviesList = () => {
                 </Link>
 
                 <div className="flex justify-between text-xs w-[90%] mx-auto">
-                  <p> {movie.rated ? movie.rated : "No rating"}</p>
+                  <p>
+                    {" "}
+                    {movie.vote_average
+                      ? `${Math.round(movie.vote_average * 10) / 10}/10`
+                      : "No rating"}
+                  </p>
                   <Link to={"/movies/" + movie.id}>View Reviews</Link>
                 </div>
                 <p className="text-base">{movie.title}</p>
                 <p className="font-normal text-sm text-justify w-[90%] mx-auto">
-                  {movieDetails.overview}
+                  {movie.details.overview
+                    ? `${
+                        movie.details.overview.length < 250
+                          ? movie.details.overview
+                          : movie.details.overview.substring(0, 250) + "..."
+                      }`
+                    : "No summary available"}
                 </p>
               </div>
             );
