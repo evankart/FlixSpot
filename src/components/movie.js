@@ -7,7 +7,7 @@ import AddReview from "./add-review";
 
 const Movie = (props) => {
   // User authentication
-  const isAuthenticated = useAuth0();
+  const { isAuthenticated, loginWithRedirect } = useAuth0();
   const { id } = useParams();
   const { user } = useAuth0();
   let userId;
@@ -163,7 +163,15 @@ const Movie = (props) => {
                 </div>
               );
             })}
-          {!user && <div>Please log in to add reviews.</div>}
+          {!user && (
+            <div>
+              Please{" "}
+              <button className="font-bold" onClick={loginWithRedirect}>
+                log in
+              </button>{" "}
+              to add reviews.
+            </div>
+          )}
         </div>
       </div>
     </div>

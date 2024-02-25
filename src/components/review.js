@@ -22,6 +22,7 @@ const Review = ({
   const isAuthenticated = useAuth0();
 
   const [editingReview, setEditingReview] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
 
   const deleteReview = (reviewId, index) => {
     MovieDataService.deleteReview(reviewId, userId, id)
@@ -43,14 +44,48 @@ const Review = ({
 
   return (
     <>
+      {isOpen && (
+        <div>
+          <div className="w-full h-full bg-black absolute top-0 left-0 opacity-50 backdrop-filter backdrop-blur-3xl"></div>
+          <div
+            onClick={() => setIsOpen(false)}
+            className="fixed inset-0 flex items-center justify-center z-50 w-10/12 self-center mx-auto"
+          >
+            <div
+              onClick={() => setIsOpen(false)}
+              className="bg-white rounded-3xl shadow-3xl bg-gradient-to-tl from-slate-200 to-white p-8"
+            >
+              <h2 className="text-2xl mb-4">
+                {" "}
+                <strong>{`${rev.author} `}</strong>
+                {`reviewed on ${moment(rev.date).format("Do MMMM YYYY")}`}
+              </h2>
+              <p className="mb-4">{rev.content}</p>
+              <button
+                className="px-4 py-2 text-white bg-blue-500 rounded"
+                onClick={() => setIsOpen(false)}
+              >
+                Close Modal
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
       <div>
         <div>
           <h3 className="text-md mt-4 mb-1">
             <strong>{`${rev.author} `}</strong>
             {`reviewed on ${moment(rev.date).format("Do MMMM YYYY")}`}
           </h3>
+
           <p className="text-sm italic">
-            {rev.content.substring(0, 300).trim() + "... (see more)"}
+            {rev.content.substring(0, 300).trim() + "... "}
+            <button
+              className="italic font-semibold text-xs"
+              onClick={() => setIsOpen(true)}
+            >
+              (see more)
+            </button>
           </p>
 
           {isAuthenticated && rev.user_id === userId && (
@@ -82,7 +117,6 @@ const Review = ({
               </button>
             </div>
           )}
-
           {editingReview && movie.reviews[index] === rev && (
             <div className="mt-3">
               <EditReview
