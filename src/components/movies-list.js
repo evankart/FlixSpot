@@ -1,21 +1,17 @@
 import { useState, useEffect } from "react";
-import MovieDataService from "../services/movies";
+// import MovieDataService from "../services/movies";
 import { Link } from "react-router-dom";
 
 const MoviesList = () => {
-  const [movies, setMovies] = useState([]);
+  // const [movies, setMovies] = useState([]);
   const [searchTitle, setSearchTitle] = useState("");
   const [searchRating, setSearchRating] = useState("");
   const [resultsCount, setResultsCount] = useState();
   const [pageCount, setPageCount] = useState(1);
-  const [popularMovies, setPopularMovies] = useState([]);
+  const [movieResults, setMovieResults] = useState([]);
   const [moviesWithDetails, setMoviesWithDetails] = useState([]);
 
   const ratings = ["All Ratings", "G", "PG", "PG-13", "R", "UNRATED"];
-  // Retrieve movies on page load
-  useEffect(() => {
-    retrieveMovies(pageCount);
-  }, [pageCount]);
 
   useEffect(() => {
     // // themoviedb API
@@ -32,8 +28,8 @@ const MoviesList = () => {
     fetch(url, options)
       .then((res) => res.json())
       .then((json) => {
-        setPopularMovies(json.results);
-        console.log("popularMovies: ", json.results);
+        setMovieResults(json.results);
+        console.log("movieResults: ", json.results);
       })
       .catch((err) => console.error("error:" + err));
   }, []);
@@ -48,58 +44,95 @@ const MoviesList = () => {
       },
     };
 
-    Promise.all(
-      popularMovies.map((movie) =>
-        fetch(`https://api.themoviedb.org/3/movie/${movie.id}`, options)
-          .then((response) => response.json())
-          .then((json) => ({ ...movie, details: json }))
+    console.log("movieResults before: ", movieResults);
+    if (Array.isArray(movieResults)) {
+      Promise.all(
+        movieResults.map((movie) =>
+          fetch(`https://api.themoviedb.org/3/movie/${movie.id}`, options)
+            .then((response) => response.json())
+            .then((json) => ({ ...movie, details: json }))
+        )
       )
-    )
-      .then((moviesWithDetails) => setMoviesWithDetails(moviesWithDetails))
-      .catch((err) => console.error(err));
-  }, [popularMovies]);
+        .then((moviesWithDetails) => setMoviesWithDetails(moviesWithDetails))
+        .catch((err) => console.error(err));
+    }
+  }, [movieResults]);
 
   useEffect(() => {
-    setResultsCount(movies.length);
+    setResultsCount(movieResults.length);
     console.log(resultsCount);
-  }, [movies, resultsCount]);
+  }, [movieResults, resultsCount]);
+
+  // // Update movie lis when search terms are updated
+  // useEffect(() => {
+  //   find(searchTitle, searchRating);
+  // }, [searchTitle, searchRating, movieResults]);
 
   // Update movie lis when search terms are updated
   useEffect(() => {
-    find(searchTitle, searchRating);
-  }, [searchTitle, searchRating, popularMovies]);
+    find(searchTitle);
+  }, [searchTitle]);
 
   useEffect(() => {
-    console.log("popularMovies: ", popularMovies);
-  }, [popularMovies]);
+    console.log("movieResults: ", movieResults);
+  }, [movieResults]);
 
-  const retrieveMovies = () => {
-    MovieDataService.getAll(pageCount - 1)
-      .then((response) => {
-        const newMovies = response.data.movies;
+  // const retrieveMovies = () => {
+  //   MovieDataService.getAll(pageCount - 1)
+  //     .then((response) => {
+  //       const newMovies = response.data.movies;
 
-        setMovies(newMovies);
-      })
-      .catch((e) => {
-        console.log(e);
-      });
-  };
+  //       setMovies(newMovies);
+  //     })
+  //     .catch((e) => {
+  //       console.log(e);
+  //     });
+  // };
 
-  const find = (query, by) => {
-    MovieDataService.find(query, by)
-      .then((response) => {
-        const newMovies = response.data.movies;
-        setMovies(newMovies);
-      })
-      .catch((e) => {
-        console.log(e);
-      });
-    setPageCount(1);
-  };
+  // const find = (query, by) => {
+  //   MovieDataService.find(query, by)
+  //     .then((response) => {
+  //       const newMovies = response.data.movies;
+  //       setMovies(newMovies);
+  //     })
+  //     .catch((e) => {
+  //       console.log(e);
+  //     });
+  //   setPageCount(1);
+  // };
+
+  function find(query) {
+    const options = {
+      method: "GET",
+      headers: {
+        accept: "application/json",
+        Authorization:
+          "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI1MmE1N2RkYjU4NDVjODY1OWFmY2FlMjhhMDhiMjJmNiIsInN1YiI6IjY1Y2E5N2MzMTI5NzBjMDE3YmM1NWFiNCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.nJn5j2iz8sMUouM62xtJo5d4bstYzgmdp8HFVJD6Wio",
+      },
+    };
+    query === ""
+      ? console.log("no search term entered")
+      : fetch(
+          `https://api.themoviedb.org/3/search/movie?query=${query}&include_adult=false&language=en-US&page=1`,
+          options
+        )
+          .then((response) => response.json())
+          .then((response) => {
+            console.log(response);
+            const newMovies = response.results;
+            setMovieResults(newMovies);
+          })
+          .catch((err) => console.error(err));
+  }
 
   return (
     <div className="max-w-6xl mx-auto">
-      <form class="flex wrap ml-auto mr-5 h-10 my-5 w-5/6 sm:w-3/5">
+      <form
+        class="flex wrap ml-auto mr-5 h-10 my-5 w-5/6 sm:w-3/5"
+        onSubmit={(e) => {
+          e.preventDefault();
+        }}
+      >
         {/* Title Search Input */}
         <input
           class="rounded-full px-5 mr-2 w-full bg-gray-100 drop-shadow-md text-right border-slate-200 border-2 outline-none"
