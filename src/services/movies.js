@@ -1,7 +1,7 @@
 import axios from "axios";
 
-const base = "https://flixspot-backend.vercel.app/api/v1/movies";
-// const base = "http://localhost:5000/api/v1/movies";
+// const base = "https://flixspot-backend.vercel.app/api/v1/movies";
+const base = "http://localhost:5000/api/v1/movies";
 
 class MovieDataService {
   getAll(page = 0) {
@@ -18,8 +18,8 @@ class MovieDataService {
   }
 
   createReview(data) {
-    // console.log(`CREATE REVIEW POST SERVICE`);
-    // console.log(`(POST) data: `, data);
+    console.log(`CREATE REVIEW POST SERVICE`, `${base}/review`);
+    console.log(`(POST) data: `, data);
     return axios.post(`${base}/review`, data);
   }
   updateReview(review_id, user_id, review) {

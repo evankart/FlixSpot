@@ -46,7 +46,7 @@ const Review = ({
     <>
       {isOpen && (
         <div>
-          <div className="w-full h-full bg-black absolute top-0 left-0 opacity-50 backdrop-filter backdrop-blur-3xl"></div>
+          <div className="w-full h-full max-h-screen overflow-scroll bg-black absolute top-0 left-0 opacity-50 backdrop-filter backdrop-blur-3xl"></div>
           <div
             onClick={() => setIsOpen(false)}
             className="fixed inset-0 flex items-center justify-center z-50 w-10/12 self-center mx-auto"
@@ -56,7 +56,6 @@ const Review = ({
               className="bg-white rounded-3xl shadow-3xl bg-gradient-to-tl from-slate-200 to-white p-8"
             >
               <h2 className="text-2xl mb-4">
-                {" "}
                 <strong>{`${rev.author} `}</strong>
                 {`reviewed on ${moment(rev.date).format("Do MMMM YYYY")}`}
               </h2>

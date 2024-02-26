@@ -144,7 +144,9 @@ const Movie = (props) => {
 
           {reviews &&
             reviews.map((rev, index) => {
-              console.log("rev: ", rev);
+              {
+                /* console.log("rev: ", rev); */
+              }
               return (
                 <div className="mb-3">
                   <Review
