@@ -1,22 +1,47 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 // import MovieDataService from "../services/movies";
 import { Link } from "react-router-dom";
 
 const MoviesList = () => {
   // const [movies, setMovies] = useState([]);
   const [searchTitle, setSearchTitle] = useState("");
-  const [searchRating, setSearchRating] = useState("");
+  // const [searchRating, setSearchRating] = useState("");
   const [resultsCount, setResultsCount] = useState();
   const [pageCount, setPageCount] = useState(1);
   const [movieResults, setMovieResults] = useState([]);
   const [moviesWithDetails, setMoviesWithDetails] = useState([]);
 
-  const ratings = ["All Ratings", "G", "PG", "PG-13", "R", "UNRATED"];
+  // const ratings = ["All Ratings", "G", "PG", "PG-13", "R", "UNRATED"];
 
-  useEffect(() => {
-    // // themoviedb API
-    const url = "https://api.themoviedb.org/3/trending/movie/week";
-    const options = {
+  // themoviedb genre ids
+  const genreIds = [
+    { id: 28, name: "Action" },
+    { id: 12, name: "Adventure" },
+    { id: 16, name: "Animation" },
+    { id: 35, name: "Comedy" },
+    { id: 80, name: "Crime" },
+    { id: 99, name: "Documentary" },
+    { id: 18, name: "Drama" },
+    { id: 10751, name: "Family" },
+    { id: 14, name: "Fantasy" },
+    { id: 36, name: "History" },
+    { id: 27, name: "Horror" },
+    { id: 10402, name: "Music" },
+    { id: 9648, name: "Mystery" },
+    { id: 10749, name: "Romance" },
+    { id: 878, name: "Science Fiction" },
+    { id: 10770, name: "TV Movie" },
+    { id: 53, name: "Thriller" },
+    { id: 10752, name: "War" },
+    { id: 37, name: "Western" },
+  ];
+
+  // let genreName = genreIds.find((genreId) => genreId.id === 9648);
+  // console.log(genreName.name);
+
+  // wrap API options in useMemo hook to prevent multiple renders
+  const options = useMemo(() => {
+    return {
       method: "GET",
       headers: {
         accept: "application/json",
@@ -24,6 +49,11 @@ const MoviesList = () => {
           "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI1MmE1N2RkYjU4NDVjODY1OWFmY2FlMjhhMDhiMjJmNiIsInN1YiI6IjY1Y2E5N2MzMTI5NzBjMDE3YmM1NWFiNCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.nJn5j2iz8sMUouM62xtJo5d4bstYzgmdp8HFVJD6Wio",
       },
     };
+  }, []);
+
+  // Get trending movies from themoviedb API on startups
+  useEffect(() => {
+    const url = "https://api.themoviedb.org/3/trending/movie/week";
 
     fetch(url, options)
       .then((res) => res.json())
@@ -34,16 +64,8 @@ const MoviesList = () => {
       .catch((err) => console.error("error:" + err));
   }, []);
 
+  // Get movie details for each movie in movieResults
   useEffect(() => {
-    const options = {
-      method: "GET",
-      headers: {
-        accept: "application/json",
-        Authorization:
-          "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI1MmE1N2RkYjU4NDVjODY1OWFmY2FlMjhhMDhiMjJmNiIsInN1YiI6IjY1Y2E5N2MzMTI5NzBjMDE3YmM1NWFiNCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.nJn5j2iz8sMUouM62xtJo5d4bstYzgmdp8HFVJD6Wio",
-      },
-    };
-
     console.log("movieResults before: ", movieResults);
     if (Array.isArray(movieResults)) {
       Promise.all(
@@ -56,26 +78,17 @@ const MoviesList = () => {
         .then((moviesWithDetails) => setMoviesWithDetails(moviesWithDetails))
         .catch((err) => console.error(err));
     }
-  }, [movieResults]);
+  }, [movieResults, options]);
 
+  // Update # of search results returned by query
   useEffect(() => {
     setResultsCount(movieResults.length);
-    console.log(resultsCount);
-  }, [movieResults, resultsCount]);
+  }, [movieResults]);
 
-  // // Update movie lis when search terms are updated
-  // useEffect(() => {
-  //   find(searchTitle, searchRating);
-  // }, [searchTitle, searchRating, movieResults]);
-
-  // Update movie lis when search terms are updated
+  // Search for movies as query term changes
   useEffect(() => {
     find(searchTitle);
   }, [searchTitle]);
-
-  useEffect(() => {
-    console.log("movieResults: ", movieResults);
-  }, [movieResults]);
 
   // const retrieveMovies = () => {
   //   MovieDataService.getAll(pageCount - 1)
@@ -102,14 +115,6 @@ const MoviesList = () => {
   // };
 
   function find(query) {
-    const options = {
-      method: "GET",
-      headers: {
-        accept: "application/json",
-        Authorization:
-          "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI1MmE1N2RkYjU4NDVjODY1OWFmY2FlMjhhMDhiMjJmNiIsInN1YiI6IjY1Y2E5N2MzMTI5NzBjMDE3YmM1NWFiNCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.nJn5j2iz8sMUouM62xtJo5d4bstYzgmdp8HFVJD6Wio",
-      },
-    };
     query === ""
       ? console.log("no search term entered")
       : fetch(
@@ -133,7 +138,7 @@ const MoviesList = () => {
           e.preventDefault();
         }}
       >
-        {/* Title Search Input */}
+        {/* Title Search Input Field */}
         <input
           class="rounded-full px-5 mr-2 w-full bg-gray-100 drop-shadow-md text-right border-slate-200 border-2 outline-none"
           type="text"
@@ -143,22 +148,6 @@ const MoviesList = () => {
           }}
           placeholder="Search by Title"
         />
-
-        {/* Rating Search Selection */}
-        <select
-          class="rounded-full px-2 ml-auto w-auto text-center bg-gray-100 drop-shadow-md border-slate-200 border-2 outline-none"
-          type="select"
-          value={searchRating}
-          onChange={(e) => {
-            setSearchRating(e.target.value);
-          }}
-          placeholder="Search by Rating"
-        >
-          {/* Update ratings choices in ratings variable */}
-          {ratings.map((rating) => {
-            return <option value={rating}>{rating}</option>;
-          })}
-        </select>
       </form>
 
       <div className="flex flex-wrap max-w-7xl mx-auto">
@@ -168,6 +157,7 @@ const MoviesList = () => {
           </div>
         ) : (
           moviesWithDetails.map((movie) => {
+            /* console.log("movie with details: ", movie);*/
             /* let posterSrc; */
 
             let posterSrc = `https://www.themoviedb.org/t/p/w500/${movie.poster_path}`;
